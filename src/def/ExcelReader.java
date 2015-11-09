@@ -13,9 +13,9 @@ public class ExcelReader {
 	 * This method will read in the data from the csv to a String format
 	 * @return returns an array of 20001 values, in 6 columns
 	 */
- public static Float[][] read(){
+ public static float[][] read(){
 	 Scanner scanner;
-	 Float[][] array =  new Float[20001][6];
+	 float[][] array =  new float[20001][6];
 	try {
 		int x = 0;
 		int y=0;
