@@ -8,7 +8,7 @@ package def;
 public class Runner {
 
 	public static void main(String[] args) {
-	
+	ExcelReader.read();
 
 	}
 
