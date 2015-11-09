@@ -27,6 +27,11 @@ import javax.swing.border.BevelBorder;
  */
 public class Runner {
 
+	/**
+	 * This is the runner class, right now it will load all the data directly in a graph, in the future this will not be the case but it will instead hold the data in the data class
+	 * @param args Nothing
+	 */
+	@SuppressWarnings("deprecation")
 	public static void main(String[] args) {
 		
 		JFrame  jf = new JFrame("Kalman filter");
@@ -52,9 +57,10 @@ public class Runner {
 		final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
 		//renderer.setSeriesLi
 		//renderer.setSeriesLinesVisible(5, false);
+		
 		renderer.setShapesVisible(false);
 		renderer.setSeriesVisible(5, false);
-		renderer.setSeriesFillPaint(0, Color.BLACK);
+		renderer.setSeriesPaint(1, Color.black);
 		plot.setRenderer(renderer);
 		final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
 		rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
@@ -80,8 +86,8 @@ public class Runner {
 	}
 	/**
 	 * This creates a dataset for the chart from the input data
-	 * @param floatArray
-	 * @return
+	 * @param floatArray the array to input, uses the format from the ExcelReader.read() method
+	 * @return a dataset that can be used to plot a graph
 	 */
 	private static XYDataset createDataset(float[][] floatArray) {
 
