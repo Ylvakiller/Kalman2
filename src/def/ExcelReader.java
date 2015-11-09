@@ -1,6 +1,5 @@
 package def;
 
-import java.io.FileReader;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
