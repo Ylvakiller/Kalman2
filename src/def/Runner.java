@@ -1,12 +1,13 @@
 package def;
 
-import javax.swing.JFrame;
-
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
-import javax.swing.JPanel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JToggleButton;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -18,7 +19,6 @@ import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import javax.swing.border.BevelBorder;
 /**
  * This class will run the kalman filter algorithm
  * This class will also need to do the complete interface
@@ -44,15 +44,51 @@ public class Runner {
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setBounds(10, 11, 200, 200);
 		jf.getContentPane().add(buttonPanel);
+		buttonPanel.setLayout(null);
+		
+		JToggleButton btnGR = new JToggleButton("Gyro Roll");
+		
+		btnGR.setSelected(true);
+		btnGR.setBounds(0, 11, 121, 23);
+		buttonPanel.add(btnGR);
+		
+		JToggleButton btnGP = new JToggleButton("Gyro Pitch");
+		btnGP.setSelected(true);
+		btnGP.setBounds(0, 36, 121, 23);
+		buttonPanel.add(btnGP);
+		
+		JToggleButton btnGY = new JToggleButton("Gyro Yaw");
+		btnGY.setSelected(true);
+		btnGY.setBounds(0, 61, 121, 23);
+		buttonPanel.add(btnGY);
+		
+		JToggleButton btnAX = new JToggleButton("Accel X");
+		btnAX.setSelected(true);
+		btnAX.setBounds(0, 86, 121, 23);
+		buttonPanel.add(btnAX);
+		
+		JToggleButton btnAY = new JToggleButton("Accel Y");
+		btnAY.setSelected(true);
+		btnAY.setBounds(0, 111, 121, 23);
+		buttonPanel.add(btnAY);
+		
+		JToggleButton btnAZ = new JToggleButton("Accel Z");
+		btnAZ.setSelected(true);
+		btnAZ.setBounds(0, 136, 121, 23);
+		buttonPanel.add(btnAZ);
+		
 		
 		JPanel panel = new JPanel();
 		//panel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		panel.setBounds(216, 11, 800, 500);
 
-		JFreeChart lineChart = ChartFactory.createXYLineChart("", "value", "x", Runner.createDataset(ExcelReader.read()),PlotOrientation.VERTICAL, true, true, false);
+		JFreeChart lineChart = ChartFactory.createXYLineChart("", "x", "value", Runner.createDataset(data.returnAll()),PlotOrientation.VERTICAL, true, true, false);
 		//ChartFactory.createLineChart(title, categoryAxisLabel, valueAxisLabel, dataset, orientation, legend, tooltips, urls)
-		lineChart.setBackgroundPaint(Color.white);
+		lineChart.setBackgroundPaint(Color.lightGray);
 		final XYPlot plot = lineChart.getXYPlot();
+		lineChart.getLegend().setBackgroundPaint(Color.gray);
+		lineChart.getLegend().setItemPaint(Color.BLACK);
+		
 		plot.setBackgroundPaint(Color.white);
 		plot.setDomainGridlinePaint(Color.lightGray);
 		plot.setRangeGridlinePaint(Color.lightGray);
@@ -62,8 +98,15 @@ public class Runner {
 		//renderer.setSeriesLinesVisible(5, false);
 		
 		renderer.setShapesVisible(false);
-		renderer.setSeriesVisible(5, false);
-		renderer.setSeriesPaint(1, Color.black);
+		renderer.setSeriesVisible(5, true);
+		renderer.setSeriesPaint(0, Color.black);
+		renderer.setSeriesPaint(1, Color.green);
+		renderer.setSeriesPaint(2, Color.red);
+		renderer.setSeriesPaint(3, Color.blue);
+		renderer.setSeriesPaint(4, Color.cyan);
+		renderer.setSeriesPaint(5, Color.orange);
+		
+		
 		plot.setRenderer(renderer);
 		final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
 		rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
@@ -72,19 +115,53 @@ public class Runner {
 		ChartPanel chartPanel = new ChartPanel(lineChart);
 	      
         // settind default size
-        chartPanel.setPreferredSize(panel.getSize());
-        chartPanel.setVisible(true);
-        chartPanel.validate();
-        panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-        // add to contentPane
-        panel.add(chartPanel);
-        panel.validate();
-        panel.setVisible(true);
-    	jf.getContentPane().add(panel);
-        //jf.pack();
-    	
-		jf.setVisible(true);
-		jf.validate();
+       
+		
+		btnGR.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				renderer.setSeriesVisible(0,btnGR.isSelected());
+			}
+		});
+		btnGP.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				renderer.setSeriesVisible(1,btnGP.isSelected());
+			}
+		});
+		btnGY.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				renderer.setSeriesVisible(2,btnGY.isSelected());
+			}
+		});
+		btnAX.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				renderer.setSeriesVisible(3,btnAX.isSelected());
+			}
+		});
+		btnAY.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				renderer.setSeriesVisible(4,btnAY.isSelected());
+			}
+		});
+		btnAZ.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				renderer.setSeriesVisible(5,btnAZ.isSelected());
+			}
+		});
+		
+		 chartPanel.setPreferredSize(panel.getSize());
+	        chartPanel.setVisible(true);
+	        chartPanel.validate();
+	        panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+	        // add to contentPane
+	        panel.add(chartPanel);
+	        panel.validate();
+	        panel.setVisible(true);
+	    	jf.getContentPane().add(panel);
+	        //jf.pack();
+	    	
+			jf.setVisible(true);
+			jf.validate();
+			
         System.out.println("done");
 	}
 	/**
@@ -125,5 +202,4 @@ public class Runner {
 		return dataset;
 
 	}
-	
 }

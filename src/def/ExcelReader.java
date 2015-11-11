@@ -1,8 +1,8 @@
 package def;
 
-import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Scanner;
 /**
  * This class will read the data from the supplied excel file for the second kalman filter assignment
  * @author Ylva
