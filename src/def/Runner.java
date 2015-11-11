@@ -34,6 +34,9 @@ public class Runner {
 	@SuppressWarnings("deprecation")
 	public static void main(String[] args) {
 		
+		Data data = new Data();
+		
+		
 		JFrame  jf = new JFrame("Kalman filter");
 		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		jf.getContentPane().setLayout(null);
