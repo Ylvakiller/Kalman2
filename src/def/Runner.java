@@ -4,6 +4,9 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -19,6 +22,8 @@ import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import javax.swing.JTextArea;
+import javax.swing.JScrollPane;
 /**
  * This class will run the kalman filter algorithm
  * This class will also need to do the complete interface
@@ -157,11 +162,36 @@ public class Runner {
 	        panel.validate();
 	        panel.setVisible(true);
 	    	jf.getContentPane().add(panel);
-	        //jf.pack();
 	    	
+	    	JScrollPane scrollPane = new JScrollPane();
+	    	scrollPane.setBounds(10, 222, 200, 216);
+	    	jf.getContentPane().add(scrollPane);
+	    	
+	    	JTextArea textArea = new JTextArea();
+	    	scrollPane.setViewportView(textArea);
+	        //jf.pack();
+	    	OutputStream out = new OutputStream() {
+	    	    @Override
+	    	    public void write(final int b) throws IOException {
+	    	    	textArea.append((String.valueOf((char) b)));
+	    	    }
+	    	 
+	    	    @Override
+	    	    public void write(byte[] b, int off, int len) throws IOException {
+	    	    	textArea.append((new String(b, off, len)));
+	    	    }
+	    	    /*
+	    	    @Override
+	    	    public void write(byte[] b) throws IOException {
+	    	    	textArea.append((b, 0, b.length);
+	    	    }*/
+	    	  };
+	    	 
+	    	  System.setOut(new PrintStream(out, true));
+	    	  System.setErr(new PrintStream(out, true));
 			jf.setVisible(true);
 			jf.validate();
-			
+			System.err.println("Test");
         System.out.println("done");
 	}
 	/**
