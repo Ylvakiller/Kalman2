@@ -17,9 +17,10 @@ public class ExcelReader {
 	 Scanner scanner;
 	 float[][] array =  new float[20001][6];
 	try {
+		System.out.println( System.getProperty("user.dir"));
 		int x = 0;
 		int y=0;
-		scanner = new Scanner(new File("./data/KF Assignment 2 data.csv"));
+		scanner = new Scanner(new File(System.getProperty("user.dir")+"/data/KF Assignment 2 data.csv"));
 		while(scanner.hasNextLine()){
 			y=0;
 			String line = scanner.nextLine();
@@ -33,6 +34,7 @@ public class ExcelReader {
 	     scanner.close();
 	} catch (FileNotFoundException e) {
 		e.printStackTrace();
+		
 		//System.err.println(e.getStackTrace());
 	}
 	return array;

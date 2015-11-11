@@ -24,6 +24,7 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
+import javax.swing.JButton;
 /**
  * This class will run the kalman filter algorithm
  * This class will also need to do the complete interface
@@ -108,6 +109,10 @@ public class Runner {
 		btnAZ.setSelected(true);
 		btnAZ.setBounds(0, 136, 121, 23);
 		buttonPanel.add(btnAZ);
+		
+		JButton btnReReadData = new JButton("Re read data");
+		btnReReadData.setBounds(0, 166, 121, 23);
+		buttonPanel.add(btnReReadData);
 		
 		
 		JPanel panel = new JPanel();
