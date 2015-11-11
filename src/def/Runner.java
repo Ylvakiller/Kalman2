@@ -180,11 +180,11 @@ public class Runner {
 	    	    public void write(byte[] b, int off, int len) throws IOException {
 	    	    	textArea.append((new String(b, off, len)));
 	    	    }
-	    	    /*
+	    	    
 	    	    @Override
 	    	    public void write(byte[] b) throws IOException {
-	    	    	textArea.append((b, 0, b.length);
-	    	    }*/
+	    	    	textArea.append(new String(b, 0, b.length));
+	    	    }
 	    	  };
 	    	 
 	    	  System.setOut(new PrintStream(out, true));
