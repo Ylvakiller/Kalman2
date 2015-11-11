@@ -6,5 +6,5 @@ package def;
  *
  */
 public class Filter {
-
+	
 }
