@@ -57,7 +57,7 @@ public class Data {
 	
 	/**
 	 * Returns all the data as it is stored
-	 * @return
+	 * @return all the data stored in this class
 	 */
 	public float[][] returnAll(){
 		return array;

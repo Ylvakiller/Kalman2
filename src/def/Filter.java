@@ -6,5 +6,12 @@ package def;
  *
  */
 public class Filter {
-	
+	/*
+	 * steps we need to go to
+	 * 1, get new data
+	 * make new matrix A with gyro data
+	 * Calculate Xhat and P estimates
+	 * Compute Kalman gain
+	 * convert acc to euler anges 
+	 */
 }
