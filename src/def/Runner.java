@@ -39,38 +39,38 @@ public class Runner {
 	 */
 	@SuppressWarnings("deprecation")
 	public static void main(String[] args) {
-		
-		
-		
-		
+
+
+
+
 		JFrame  jf = new JFrame("Kalman filter");
 		JScrollPane scrollPane = new JScrollPane();
-    	scrollPane.setBounds(10, 222, 200, 216);
-    	jf.getContentPane().add(scrollPane);
-    	
-    	JTextArea textArea = new JTextArea();
-    	scrollPane.setViewportView(textArea);
-        //jf.pack();
-    	OutputStream out = new OutputStream() {
-    	    @Override
-    	    public void write(final int b) throws IOException {
-    	    	textArea.append((String.valueOf((char) b)));
-    	    }
-    	 
-    	    @Override
-    	    public void write(byte[] b, int off, int len) throws IOException {
-    	    	textArea.append((new String(b, off, len)));
-    	    }
-    	    
-    	    @Override
-    	    public void write(byte[] b) throws IOException {
-    	    	textArea.append(new String(b, 0, b.length));
-    	    }
-    	  };
-    	 
-    	  System.setOut(new PrintStream(out, true));
-    	  System.setErr(new PrintStream(out, true));
-    	  Data data = new Data();
+		scrollPane.setBounds(10, 222, 200, 216);
+		jf.getContentPane().add(scrollPane);
+
+		JTextArea textArea = new JTextArea();
+		scrollPane.setViewportView(textArea);
+		//jf.pack();
+		OutputStream out = new OutputStream() {
+			@Override
+			public void write(final int b) throws IOException {
+				textArea.append((String.valueOf((char) b)));
+			}
+
+			@Override
+			public void write(byte[] b, int off, int len) throws IOException {
+				textArea.append((new String(b, off, len)));
+			}
+
+			@Override
+			public void write(byte[] b) throws IOException {
+				textArea.append(new String(b, 0, b.length));
+			}
+		};
+
+		System.setOut(new PrintStream(out, true));
+		System.setErr(new PrintStream(out, true));
+		Data data = new Data();
 		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		jf.getContentPane().setLayout(null);
 		jf.setSize(1200, 600);
@@ -78,43 +78,44 @@ public class Runner {
 		buttonPanel.setBounds(10, 11, 200, 200);
 		jf.getContentPane().add(buttonPanel);
 		buttonPanel.setLayout(null);
-		
+
 		JToggleButton btnGR = new JToggleButton("Gyro Roll");
-		
+
 		btnGR.setSelected(true);
 		btnGR.setBounds(0, 11, 121, 23);
 		buttonPanel.add(btnGR);
-		
+
 		JToggleButton btnGP = new JToggleButton("Gyro Pitch");
 		btnGP.setSelected(true);
 		btnGP.setBounds(0, 36, 121, 23);
 		buttonPanel.add(btnGP);
-		
+
 		JToggleButton btnGY = new JToggleButton("Gyro Yaw");
 		btnGY.setSelected(true);
 		btnGY.setBounds(0, 61, 121, 23);
 		buttonPanel.add(btnGY);
-		
+
 		JToggleButton btnAX = new JToggleButton("Accel X");
 		btnAX.setSelected(true);
 		btnAX.setBounds(0, 86, 121, 23);
 		buttonPanel.add(btnAX);
-		
+
 		JToggleButton btnAY = new JToggleButton("Accel Y");
 		btnAY.setSelected(true);
 		btnAY.setBounds(0, 111, 121, 23);
 		buttonPanel.add(btnAY);
-		
+
 		JToggleButton btnAZ = new JToggleButton("Accel Z");
 		btnAZ.setSelected(true);
 		btnAZ.setBounds(0, 136, 121, 23);
 		buttonPanel.add(btnAZ);
-		
+
 		JButton btnReReadData = new JButton("Re read data");
+
 		btnReReadData.setBounds(0, 166, 121, 23);
 		buttonPanel.add(btnReReadData);
-		
-		
+
+
 		JPanel panel = new JPanel();
 		//panel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		panel.setBounds(216, 11, 800, 500);
@@ -125,15 +126,15 @@ public class Runner {
 		final XYPlot plot = lineChart.getXYPlot();
 		lineChart.getLegend().setBackgroundPaint(Color.gray);
 		lineChart.getLegend().setItemPaint(Color.BLACK);
-		
+
 		plot.setBackgroundPaint(Color.white);
 		plot.setDomainGridlinePaint(Color.lightGray);
 		plot.setRangeGridlinePaint(Color.lightGray);
-		
+
 		final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
 		//renderer.setSeriesLi
 		//renderer.setSeriesLinesVisible(5, false);
-		
+
 		renderer.setShapesVisible(false);
 		renderer.setSeriesVisible(5, true);
 		renderer.setSeriesPaint(0, Color.black);
@@ -142,18 +143,18 @@ public class Runner {
 		renderer.setSeriesPaint(3, Color.blue);
 		renderer.setSeriesPaint(4, Color.cyan);
 		renderer.setSeriesPaint(5, Color.orange);
-		
-		
+
+
 		plot.setRenderer(renderer);
 		final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
 		rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 		final NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
 		domainAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 		ChartPanel chartPanel = new ChartPanel(lineChart);
-	      
-        // settind default size
-       
-		
+
+		// settind default size
+
+
 		btnGR.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				renderer.setSeriesVisible(0,btnGR.isSelected());
@@ -184,22 +185,28 @@ public class Runner {
 				renderer.setSeriesVisible(5,btnAZ.isSelected());
 			}
 		});
-		
-		 chartPanel.setPreferredSize(panel.getSize());
-	        chartPanel.setVisible(true);
-	        chartPanel.validate();
-	        panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-	        // add to contentPane
-	        panel.add(chartPanel);
-	        panel.validate();
-	        panel.setVisible(true);
-	    	jf.getContentPane().add(panel);
-	    	
-	    	
-			jf.setVisible(true);
-			jf.validate();
-			System.err.println("Test");
-        System.out.println("done");
+		btnReReadData.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				data.update();
+				plot.setDataset(Runner.createDataset(data.returnAll()));
+				lineChart.fireChartChanged();
+			}
+		});
+		chartPanel.setPreferredSize(panel.getSize());
+		chartPanel.setVisible(true);
+		chartPanel.validate();
+		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		// add to contentPane
+		panel.add(chartPanel);
+		panel.validate();
+		panel.setVisible(true);
+		jf.getContentPane().add(panel);
+
+
+		jf.setVisible(true);
+		jf.validate();
+		System.err.println("Test");
+		System.out.println("done");
 	}
 	/**
 	 * This creates a dataset for the chart from the input data
@@ -214,7 +221,7 @@ public class Runner {
 		final XYSeries aX = new XYSeries("Accel X");
 		final XYSeries aY = new XYSeries("Accel Y");
 		final XYSeries aZ = new XYSeries("Accel Z");
-		
+
 		int i=0;
 		while(i<floatArray.length){
 			gRoll.add(i,floatArray[i][0]);
@@ -234,7 +241,7 @@ public class Runner {
 		dataset.addSeries(aX);
 		dataset.addSeries(aY);
 		dataset.addSeries(aZ);
-		
+
 
 		return dataset;
 
