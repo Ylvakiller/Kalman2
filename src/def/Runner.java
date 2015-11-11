@@ -39,10 +39,37 @@ public class Runner {
 	@SuppressWarnings("deprecation")
 	public static void main(String[] args) {
 		
-		Data data = new Data();
+		
 		
 		
 		JFrame  jf = new JFrame("Kalman filter");
+		JScrollPane scrollPane = new JScrollPane();
+    	scrollPane.setBounds(10, 222, 200, 216);
+    	jf.getContentPane().add(scrollPane);
+    	
+    	JTextArea textArea = new JTextArea();
+    	scrollPane.setViewportView(textArea);
+        //jf.pack();
+    	OutputStream out = new OutputStream() {
+    	    @Override
+    	    public void write(final int b) throws IOException {
+    	    	textArea.append((String.valueOf((char) b)));
+    	    }
+    	 
+    	    @Override
+    	    public void write(byte[] b, int off, int len) throws IOException {
+    	    	textArea.append((new String(b, off, len)));
+    	    }
+    	    
+    	    @Override
+    	    public void write(byte[] b) throws IOException {
+    	    	textArea.append(new String(b, 0, b.length));
+    	    }
+    	  };
+    	 
+    	  System.setOut(new PrintStream(out, true));
+    	  System.setErr(new PrintStream(out, true));
+    	  Data data = new Data();
 		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		jf.getContentPane().setLayout(null);
 		jf.setSize(1200, 600);
@@ -163,32 +190,7 @@ public class Runner {
 	        panel.setVisible(true);
 	    	jf.getContentPane().add(panel);
 	    	
-	    	JScrollPane scrollPane = new JScrollPane();
-	    	scrollPane.setBounds(10, 222, 200, 216);
-	    	jf.getContentPane().add(scrollPane);
 	    	
-	    	JTextArea textArea = new JTextArea();
-	    	scrollPane.setViewportView(textArea);
-	        //jf.pack();
-	    	OutputStream out = new OutputStream() {
-	    	    @Override
-	    	    public void write(final int b) throws IOException {
-	    	    	textArea.append((String.valueOf((char) b)));
-	    	    }
-	    	 
-	    	    @Override
-	    	    public void write(byte[] b, int off, int len) throws IOException {
-	    	    	textArea.append((new String(b, off, len)));
-	    	    }
-	    	    
-	    	    @Override
-	    	    public void write(byte[] b) throws IOException {
-	    	    	textArea.append(new String(b, 0, b.length));
-	    	    }
-	    	  };
-	    	 
-	    	  System.setOut(new PrintStream(out, true));
-	    	  System.setErr(new PrintStream(out, true));
 			jf.setVisible(true);
 			jf.validate();
 			System.err.println("Test");

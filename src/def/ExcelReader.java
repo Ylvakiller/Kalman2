@@ -32,8 +32,8 @@ public class ExcelReader {
 		}
 	     scanner.close();
 	} catch (FileNotFoundException e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
+		//System.err.println(e.getStackTrace());
 	}
 	return array;
  }
