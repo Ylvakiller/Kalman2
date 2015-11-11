@@ -19,8 +19,10 @@ public class ExcelReader {
 	try {
 		System.out.println( System.getProperty("user.dir"));
 		if (System.getProperty("user.dir").equalsIgnoreCase("/home/pi")){
+			System.out.println("changing dir");
 			System.setProperty("user.dir", "/home/pi/workspace/Kalman test/Kalman2");
 		}
+		System.out.println( System.getProperty("user.dir"));
 		int x = 0;
 		int y=0;
 		scanner = new Scanner(new File(System.getProperty("user.dir")+"/data/KF Assignment 2 data.csv"));
