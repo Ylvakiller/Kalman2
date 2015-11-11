@@ -1,4 +1,8 @@
 package def;
+
+import org.apache.commons.math3.linear.MatrixUtils;
+import org.apache.commons.math3.linear.RealMatrix;
+
 /**
  * This class will hold all the functionality for the filter
  * This class will need to be run from a runner (and as such can be quickly put into a treaded program)
@@ -14,4 +18,8 @@ public class Filter {
 	 * Compute Kalman gain
 	 * convert acc to euler anges 
 	 */
+	public static void test(){
+		double[][] matrixData = { {1,2,3}, {2,5,3}};
+		RealMatrix m = MatrixUtils.createRealMatrix(matrixData);
+	}
 }
