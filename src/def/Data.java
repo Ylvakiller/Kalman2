@@ -9,8 +9,14 @@ package def;
 public class Data {
 	/**
 	 * This variable will hold all the data, will need some getter and setter methods though
+	 * This variable has 6 fields, gyro roll pitch and yaw and accelerometer data in the x y and z axis
 	 */
-	private float[][] array;
+	private float[][] baseArray;
+	/**
+	 * This variable will hold the filtered data, again it will needs getter and setter methods
+	 * This variable has 3 fields, roll pitch and yaw
+	 */
+	private float[][] filteredArray;
 	
 	/**
 	 * This variable is a count to see in which state the program is
@@ -22,6 +28,7 @@ public class Data {
 	 */
 	public Data(){
 		this.update();
+		filteredArray= new float[baseArray.length][3];
 		count=0;
 	}
 	/**
@@ -29,21 +36,22 @@ public class Data {
 	 * This will also reset the count
 	 */
 	public void update(){
-		array = ExcelReader.read();
+		baseArray = ExcelReader.read();
+		
 	}
 	/**
 	 * This method will return the specified row of data
 	 * @return an array of size 6 with the float values for the different datasets
 	 */
-	public float[] returnLatest(){
-		float[] temp = new float[array[0].length];//creates a new array with the length of one row of the base array
+	public float[] returnLatestBase(){
+		float[] temp = new float[baseArray[0].length];//creates a new array with the length of one row of the base array
 		if (count>=20001){
 			System.err.println("The count is out of bounds, cannot return row, stopping program.\nYou need to adapt your code");
 			throw new ArrayIndexOutOfBoundsException();
 			
 		}
 		for(int i = 0; i<temp.length;i++){
-			temp[i]=array[count][i];
+			temp[i]=baseArray[count][i];
 		}
 		count++;
 		return temp;
@@ -59,7 +67,18 @@ public class Data {
 	 * Returns all the data as it is stored
 	 * @return all the data stored in this class
 	 */
-	public float[][] returnAll(){
-		return array;
+	public float[][] returnAllBase(){
+		return baseArray;
+	}
+	/**
+	 * Will return all the filtered data
+	 * @return the array holding all the filtered data
+	 */
+	public float[][] returnAllFiltered(){
+		return filteredArray;
+	}
+	
+	public void setFilteredData(){
+		
 	}
 }

@@ -120,7 +120,7 @@ public class Runner {
 		//panel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		panel.setBounds(216, 11, 800, 500);
 
-		JFreeChart lineChart = ChartFactory.createXYLineChart("", "x", "value", Runner.createDataset(data.returnAll()),PlotOrientation.VERTICAL, true, true, false);
+		JFreeChart lineChart = ChartFactory.createXYLineChart("", "x", "value", Runner.createDataset(data.returnAllBase()),PlotOrientation.VERTICAL, true, true, false);
 		//ChartFactory.createLineChart(title, categoryAxisLabel, valueAxisLabel, dataset, orientation, legend, tooltips, urls)
 		lineChart.setBackgroundPaint(Color.lightGray);
 		final XYPlot plot = lineChart.getXYPlot();
@@ -188,7 +188,7 @@ public class Runner {
 		btnReReadData.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				data.update();
-				plot.setDataset(Runner.createDataset(data.returnAll()));
+				plot.setDataset(Runner.createDataset(data.returnAllBase()));
 				lineChart.fireChartChanged();
 			}
 		});
