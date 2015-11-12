@@ -17,12 +17,12 @@ public class Data {
 	 * This variable has 3 fields, roll pitch and yaw
 	 */
 	private float[][] filteredArray;
-	
+
 	/**
 	 * This variable is a count to see in which state the program is
 	 */
 	private int count;
-	
+
 	/**
 	 * Default constructor, sets the count to 0 and runs the update method
 	 */
@@ -37,7 +37,7 @@ public class Data {
 	 */
 	public void update(){
 		baseArray = ExcelReader.read();
-		
+
 	}
 	/**
 	 * This method will return the specified row of data
@@ -48,7 +48,7 @@ public class Data {
 		if (count>=20001){
 			System.err.println("The count is out of bounds, cannot return row, stopping program.\nYou need to adapt your code");
 			throw new ArrayIndexOutOfBoundsException();
-			
+
 		}
 		for(int i = 0; i<temp.length;i++){
 			temp[i]=baseArray[count][i];
@@ -62,7 +62,7 @@ public class Data {
 	public void resetCount(){
 		count=0;
 	}
-	
+
 	/**
 	 * Returns all the data as it is stored
 	 * @return all the data stored in this class
@@ -77,7 +77,7 @@ public class Data {
 	public float[][] returnAllFiltered(){
 		return filteredArray;
 	}
-	
+
 	/**
 	 * With this method you can store data in the filteredDataArray
 	 * @param number The location in the array to store the data
@@ -87,9 +87,9 @@ public class Data {
 	 */
 	public void setFilteredData(int number, float roll, float pitch, float yaw){
 		if (number<filteredArray.length&&number>=0){
-		filteredArray[number][0]=roll;
-		filteredArray[number][1]=pitch;
-		filteredArray[number][2]=yaw;
+			filteredArray[number][0]=roll;
+			filteredArray[number][1]=pitch;
+			filteredArray[number][2]=yaw;
 		}else if(number<0){
 			System.err.println("You entered a negative number.\nYou entered:" + number);
 			throw new ArrayIndexOutOfBoundsException();
@@ -97,5 +97,23 @@ public class Data {
 			System.err.println("You tried to enter data into the filteredArray where there was not any space for data\nThe space you tried to enter data is:" + number + "\nThe array only has " + filteredArray.length + " places for data");
 			throw new ArrayIndexOutOfBoundsException();
 		}
+	}
+
+	/**
+	 * This method will return a specific row of filteredData
+	 * @param row the row to send back
+	 * @return the row of data to be returned
+	 */
+	public float[] getSpecificData(int row){
+		float[] temp = new float[3];
+		if (row>=20001){
+			System.err.println("The number is out of bounds, cannot return row, stopping program.\nYou need to adapt your code");
+			throw new ArrayIndexOutOfBoundsException();
+		}else{
+			for(int i = 0; i<temp.length;i++){
+				temp[i]=filteredArray[count][i];
+			}
+		}
+		return temp;
 	}
 }
