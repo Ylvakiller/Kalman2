@@ -78,7 +78,24 @@ public class Data {
 		return filteredArray;
 	}
 	
-	public void setFilteredData(){
-		
+	/**
+	 * With this method you can store data in the filteredDataArray
+	 * @param number The location in the array to store the data
+	 * @param roll The value of the current roll
+	 * @param pitch The value of the current pitch
+	 * @param yaw The value of the current yaw
+	 */
+	public void setFilteredData(int number, float roll, float pitch, float yaw){
+		if (number<filteredArray.length&&number>=0){
+		filteredArray[number][0]=roll;
+		filteredArray[number][1]=pitch;
+		filteredArray[number][2]=yaw;
+		}else if(number<0){
+			System.err.println("You entered a negative number.\nYou entered:" + number);
+			throw new ArrayIndexOutOfBoundsException();
+		}else{
+			System.err.println("You tried to enter data into the filteredArray where there was not any space for data\nThe space you tried to enter data is:" + number + "\nThe array only has " + filteredArray.length + " places for data");
+			throw new ArrayIndexOutOfBoundsException();
+		}
 	}
 }
