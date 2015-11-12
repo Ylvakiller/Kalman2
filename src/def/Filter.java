@@ -1,7 +1,6 @@
 package def;
 
-import org.apache.commons.math3.linear.MatrixUtils;
-import org.apache.commons.math3.linear.RealMatrix;
+import org.ejml.simple.SimpleMatrix;
 
 /**
  * This class will hold all the functionality for the filter
@@ -19,7 +18,22 @@ public class Filter {
 	 * convert acc to euler anges 
 	 */
 	public static void test(){
-		double[][] matrixData = { {1,2,3}, {2,5,3}};
-		RealMatrix m = MatrixUtils.createRealMatrix(matrixData);
+		/*double[][] rData = { 
+				{1,0,0,0},
+				{0,1,0,0},
+				{0,0,1,0},
+				{0,0,0,1}};*/
+		//SimpleMatrix R = new SimpleMatrix(rData);
+		SimpleMatrix H = SimpleMatrix.identity(4);
+		SimpleMatrix R = SimpleMatrix.identity(4);
+		SimpleMatrix Q = SimpleMatrix.identity(4);
+		/*
+		SimpleMatrix[] P;
+		P[0] = SimpleMatrix.identity(4);*/
+		//Looking at the above code we run into an error when we have an array of P matrices
+		//What we can do however is just use P and Pold for P[k] and P[k-1] we will also have Pest for the estimate of P[k]
+		//Something that we need to take into account is that the math starts at K=1 and uses a k0 and p0 location
+		//We however do not have this since we take data from our array which starts at 0, care need to be taken to ensure we get the correct data
+		
 	}
 }
