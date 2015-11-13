@@ -43,7 +43,7 @@ public class Data {
 	 * This method will return the specified row of data
 	 * @return an array of size 6 with the float values for the different datasets
 	 */
-	public float[] returnLatestBase(){
+	public float[] getNextBaseValue(){
 		float[] temp = new float[dataArray[0].length];//creates a new array with the length of one row of the base array
 		if (count>=20001){
 			System.err.println("The count is out of bounds, cannot return row, stopping program.\nYou need to adapt your code");
@@ -121,7 +121,7 @@ public class Data {
 	 * Will get the total size of the data stored
 	 * @return dataArray.length
 	 */
-	public int size(){
+	public int length(){
 		return dataArray.length;
 	}
 }
