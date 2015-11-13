@@ -46,5 +46,7 @@ public class Filter {
 		SimpleMatrix Pold = SimpleMatrix.identity(4);
 		SimpleMatrix P = SimpleMatrix.identity(4);
 		System.out.println(P);
+		
+		
 	}
 }
