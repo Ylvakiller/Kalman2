@@ -45,21 +45,29 @@ public class Filter {
 		SimpleMatrix Pest = SimpleMatrix.identity(4);
 		SimpleMatrix Pold = SimpleMatrix.identity(4);
 		SimpleMatrix P = SimpleMatrix.identity(4);
-		System.out.println(P);
+		//System.out.println(P);
 		
 		Data data = new Data();
 		int kMax = data.length();
-		for(int i = 0; i<kMax;i++){
+		for(int i = 0; i<10;i++){
 			float[] newDat=data.getNextBaseValue();
 			float p = newDat[0];
-			float q = newDat[0];
-			float r = newDat[0];
-			double[][] A={
+			float q = newDat[1];
+			float r = newDat[2];
+			double[][] ADat={
 					{1,-p,-q,-r},
 					{p,1,r,-q},
 					{q,-r,1,p},
 					{r,q,-p,1}
 			};
+			
+			SimpleMatrix A = new SimpleMatrix(ADat);
+			double T = 0.01;
+			A = A.scale(T/2);
+			double g = 9.81;
+			double theta = 1/(Math.sin(Math.toRadians(newDat[3])/g));
+			double phi = 1/(Math.sin(-Math.toRadians(newDat[4])/(g*Math.cos(theta))));//different from randy's code, however mathematically correct this time
+			double omega = 0;//It appears that randy had a small mistake in his math, this code is the correct code according to the doc
 			/*
 			 * var A;
 					var p = measVals[0][k];
