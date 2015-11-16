@@ -17,7 +17,10 @@ public class Filter {
 	 * Compute Kalman gain
 	 * convert acc to euler anges 
 	 */
-	public void test(){
+	/**
+	 * Kalman Fusion FIlter
+	 */
+	public void KFF(){
 		/*double[][] rData = { 
 				{1,0,0,0},
 				{0,1,0,0},

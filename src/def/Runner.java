@@ -208,7 +208,7 @@ public class Runner {
 		System.err.println("Test");
 		System.out.println("done");
 		Filter filter = new Filter();
-		filter.test();
+		filter.KFF();
 	}
 	/**
 	 * This creates a dataset for the chart from the input data

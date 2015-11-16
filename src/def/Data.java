@@ -1,4 +1,9 @@
 package def;
+
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+
 /**
  * This is simply a holding class, it will hold the data for all the sensors and return the next value
  * The return value of this class we can replace with the getting data function from the pi4j library
@@ -123,5 +128,35 @@ public class Data {
 	 */
 	public int length(){
 		return dataArray.length;
+	}
+	
+	/**
+	 * Transforms the filtereddata array into a dataSet for the graphs
+	 * @return the dataset with all the data
+	 */
+	public XYSeriesCollection createFilteredDataset(){
+
+			final XYSeries fRoll = new XYSeries("Filtered Roll");
+
+			final XYSeries fPitch = new XYSeries("Filtered Roll");
+			final XYSeries fYaw = new XYSeries("Filtered Roll");
+
+			int i=0;
+			while(i<filteredArray.length){
+				fRoll.add(i,filteredArray[i][0]);
+				fPitch.add(i,filteredArray[i][1]);
+				fYaw.add(i,filteredArray[i][2]);
+				i++;
+			}
+
+
+			XYSeriesCollection dataset = new XYSeriesCollection();
+			dataset.addSeries(fRoll);
+			dataset.addSeries(fPitch);
+			dataset.addSeries(fYaw);
+
+
+			return dataset;
+
 	}
 }
