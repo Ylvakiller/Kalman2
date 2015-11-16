@@ -207,7 +207,8 @@ public class Runner {
 		jf.validate();
 		System.err.println("Test");
 		System.out.println("done");
-		Filter.test();
+		Filter filter = new Filter();
+		filter.test();
 	}
 	/**
 	 * This creates a dataset for the chart from the input data

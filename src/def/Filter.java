@@ -17,7 +17,7 @@ public class Filter {
 	 * Compute Kalman gain
 	 * convert acc to euler anges 
 	 */
-	public static void test(){
+	public void test(){
 		/*double[][] rData = { 
 				{1,0,0,0},
 				{0,1,0,0},
@@ -68,6 +68,8 @@ public class Filter {
 			double theta = 1/(Math.sin(Math.toRadians(newDat[3])/g));
 			double phi = 1/(Math.sin(-Math.toRadians(newDat[4])/(g*Math.cos(theta))));//different from randy's code, however mathematically correct this time
 			double omega = 0;//It appears that randy had a small mistake in his math, this code is the correct code according to the doc
+			SimpleMatrix Z = this.toQuaternion(theta,phi,omega);
+			Z.print();
 			/*
 			 * var A;
 					var p = measVals[0][k];
@@ -95,5 +97,26 @@ public class Filter {
 					filteredData[k-1] = toEuler(Xh[k].elements[0][0], Xh[k].elements[1][0], Xh[k].elements[2][0], Xh[k].elements[3][0]);
 			 */
 		}
+	}
+	
+	/**
+	 * This method converts euler angles to quaternion values
+	 * @param theta The given euler roll
+	 * @param phi The given euler pitch
+	 * @param omega The given euler yaw
+	 * @return A matrix with the quaternion data
+	 */
+	private SimpleMatrix toQuaternion(double theta, double phi, double omega){
+		theta = theta/2;//Since the formula for the conversion between euler and quaternion only uses these values devided by 2 this is easier to do
+		phi = phi/2;
+		omega = omega/2;
+		double[][] tempDat={	//quaternion data
+				{Math.cos(phi)*Math.cos(theta)*Math.cos(omega)+Math.sin(phi)*Math.sin(theta)*Math.sin(omega)},
+				{Math.sin(phi)*Math.cos(theta)*Math.cos(omega)+Math.cos(phi)*Math.sin(theta)*Math.sin(omega)},
+				{Math.cos(phi)*Math.sin(theta)*Math.cos(omega)+Math.sin(phi)*Math.cos(theta)*Math.sin(omega)},
+				{Math.cos(phi)*Math.cos(theta)*Math.sin(omega)+Math.sin(phi)*Math.sin(theta)*Math.cos(omega)}
+		};
+		SimpleMatrix Z = new SimpleMatrix(tempDat);
+		return Z;
 	}
 }
