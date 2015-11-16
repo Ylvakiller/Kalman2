@@ -25,8 +25,6 @@ public class Filter {
 				{0,0,0,1}};*/
 		//SimpleMatrix R = new SimpleMatrix(rData);
 		SimpleMatrix H = SimpleMatrix.identity(4);
-		SimpleMatrix R = SimpleMatrix.identity(4);
-		SimpleMatrix Q = SimpleMatrix.identity(4);
 		double[][] xHatDat={
 				{1},
 				{0},
@@ -42,61 +40,66 @@ public class Filter {
 		//Something that we need to take into account is that the math starts at K=1 and uses a k0 and p0 location
 		//We however do not have this since we take data from our array which starts at 0, care need to be taken to ensure we get the correct data
 		SimpleMatrix P0 = SimpleMatrix.identity(4);
-		SimpleMatrix Pest = SimpleMatrix.identity(4);
-		SimpleMatrix Pold = SimpleMatrix.identity(4);
+		SimpleMatrix pEst = SimpleMatrix.identity(4);
+		SimpleMatrix pOld = SimpleMatrix.identity(4);
 		SimpleMatrix P = SimpleMatrix.identity(4);
-		//System.out.println(P);
 		
+		//System.out.println(P);
+		double[][] xHat0Dat = {
+				{1},
+				{0},
+				{0},
+				{0}
+		};
+		SimpleMatrix xHatOld = new SimpleMatrix(xHat0Dat);
 		Data data = new Data();
 		int kMax = data.length();
-		for(int i = 0; i<10;i++){
+		int i = 0;
+		while( i<kMax){
 			float[] newDat=data.getNextBaseValue();
-			float p = newDat[0];
-			float q = newDat[1];
-			float r = newDat[2];
-			double[][] ADat={
-					{1,-p,-q,-r},
-					{p,1,r,-q},
-					{q,-r,1,p},
-					{r,q,-p,1}
+			float pValue = newDat[0];
+			float qValue = newDat[1];
+			float rValue = newDat[2];
+			double[][] aDat={
+					{1,-pValue,-qValue,-rValue},
+					{pValue,1,rValue,-qValue},
+					{qValue,-rValue,1,pValue},
+					{rValue,qValue,-pValue,1}
 			};
 			
-			SimpleMatrix A = new SimpleMatrix(ADat);
+			SimpleMatrix a = new SimpleMatrix(aDat);
+			double[][] qDat = {
+					{1,0,0,0},
+					{0,1,0,0},
+					{0,0,1,0},	
+					{0,0,0,1}
+			};
+			SimpleMatrix qBig =new SimpleMatrix(qDat);
+			double[][] rDat = {
+					{1,0,0,0},
+					{0,1,0,0},
+					{0,0,1,0},	
+					{0,0,0,1}
+			};
+			SimpleMatrix rBig =new SimpleMatrix(rDat);
 			double T = 0.01;
-			A = A.scale(T/2);
+			a = a.scale(T/2);
 			double g = 9.81;
 			double theta = 1/(Math.sin(Math.toRadians(newDat[3])/g));
 			double phi = 1/(Math.sin(-Math.toRadians(newDat[4])/(g*Math.cos(theta))));//different from randy's code, however mathematically correct this time
 			double omega = 0;//It appears that randy had a small mistake in his math, this code is the correct code according to the doc
 			SimpleMatrix Z = this.toQuaternion(theta,phi,omega);
-			Z.print();
-			/*
-			 * var A;
-					var p = measVals[0][k];
-					var q = measVals[1][k];
-					var r = measVals[2][k];
-					A = Matrix.I(4).add($M([
-						[0,-p,-q,-r],
-						[p, 0, r,-q],
-						[q,-r, 0, p],
-						[r, q,-p, 0]
-					]).x(T/2));
-					var g = 9.81;
-					var θ = Math.asin(Math.radians(measVals[3][k])/g);
-					var φ = Math.asin(-Math.radians(measVals[4][k]/g*Math.cos(θ)));
-					var ω = 0;
-					k++;
-					z[k] = quaternion(ω, θ, φ);
-					var eXk = A.x(Xh[k-1]);
-					var ePk = A.x(P[k-1]).x(A.transpose()).add(Q); 
-					K[k]	= ePk.x(H.transpose()).x( (H.x(ePk).x(H.transpose()).add(R) ).inverse() );
-
-					Xh[k]	= eXk.add( K[k].x( z[k].subtract(H.x(eXk)) ) ); //1 by 4 matrix.
-
-					P[k]	= ePk.subtract( K[k].x(H).x(ePk));
-					filteredData[k-1] = toEuler(Xh[k].elements[0][0], Xh[k].elements[1][0], Xh[k].elements[2][0], Xh[k].elements[3][0]);
-			 */
+			SimpleMatrix xHatEstimate = a.mult(xHatOld);
+			pEst = a.mult(pOld).mult(a.transpose()).plus(qBig);
+			SimpleMatrix K = pEst.mult(H.transpose()).mult((H.mult(pEst).mult(H.transpose()).plus(rBig)).invert());
+			xHat = xHatEstimate.plus(K.mult(Z.minus(H.mult(xHatEstimate))));
+			P = pEst.minus(K.mult(H).mult(pEst));
+			pOld=P;
+			xHatOld = xHat;
+			this.storeData(i, xHat, data);
+			i++;
 		}
+		System.out.println("Filtered everything");
 	}
 	
 	/**
@@ -118,5 +121,24 @@ public class Filter {
 		};
 		SimpleMatrix Z = new SimpleMatrix(tempDat);
 		return Z;
+	}
+	
+	private void storeData(int i, SimpleMatrix quat, Data data){
+		double q0 = quat.get(0, 0);
+		double q1 = quat.get(1, 0);
+		double q2 = quat.get(2, 0);
+		double q3 = quat.get(3, 0);
+		double roll = Math.atan2(2*(q0*q1+q2*q3), (1-2*(q1*q1+q2*q2)));
+
+		double pitch = Math.asin(2*(q0*q2-q1*q3));
+
+		double yaw = Math.atan2(2*(q0*q3+q1*q2), (1-2*(q2*q2+q3*q3)));
+		data.setFilteredData(i, (float)roll,  (float)pitch,  (float)yaw);
+		/*
+		 * var array = [];
+				array[0] = Math.degrees(Math.atan2(2*(q0*q1+q2*q3),1-2*(q1*q1+q2*q2)));
+				array[1] = Math.degrees(Math.asin(2*(q0*q2-q3*q1)));
+				array[2] = Math.degrees(Math.atan2(2*(q0*q3+q1*q2),1-2*(q2*q2+q3*q3)));
+		 */
 	}
 }
