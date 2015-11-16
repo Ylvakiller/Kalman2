@@ -144,8 +144,8 @@ public class Runner {
 		renderer.setSeriesPaint(4, Color.cyan);
 		renderer.setSeriesPaint(5, Color.orange);
 
-
-		plot.setRenderer(renderer);
+		plot.setDataset(0,Runner.createDataset(data.returnAllBase()));
+		plot.setRenderer(0, renderer);
 		final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
 		rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 		final NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
@@ -208,7 +208,9 @@ public class Runner {
 		System.err.println("Test");
 		System.out.println("done");
 		Filter filter = new Filter();
-		filter.KFF();
+		filter.KFF(data);
+		plot.setDataset(1, data.createFilteredDataset());
+		plot.setRenderer(1, new XYLineAndShapeRenderer());
 	}
 	/**
 	 * This creates a dataset for the chart from the input data

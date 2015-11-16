@@ -91,6 +91,8 @@ public class Data {
 	 * @param yaw The value of the current yaw
 	 */
 	public void setFilteredData(int number, float roll, float pitch, float yaw){
+
+		//System.out.println(number);
 		if (number<filteredArray.length&&number>=0){
 			filteredArray[number][0]=roll;
 			filteredArray[number][1]=pitch;
@@ -136,16 +138,17 @@ public class Data {
 	 */
 	public XYSeriesCollection createFilteredDataset(){
 
-			final XYSeries fRoll = new XYSeries("Filtered Roll");
+			XYSeries fRoll = new XYSeries("Filtered Roll");
 
-			final XYSeries fPitch = new XYSeries("Filtered Roll");
-			final XYSeries fYaw = new XYSeries("Filtered Roll");
+			XYSeries fPitch = new XYSeries("Filtered Pitch");
+			XYSeries fYaw = new XYSeries("Filtered Yaw");
 
 			int i=0;
 			while(i<filteredArray.length){
 				fRoll.add(i,filteredArray[i][0]);
 				fPitch.add(i,filteredArray[i][1]);
 				fYaw.add(i,filteredArray[i][2]);
+				System.out.println(filteredArray[i][1]);
 				i++;
 			}
 

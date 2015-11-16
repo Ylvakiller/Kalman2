@@ -18,9 +18,10 @@ public class Filter {
 	 * convert acc to euler anges 
 	 */
 	/**
-	 * Kalman Fusion FIlter
+	 * Kalman Fusion filter
+	 * @param data the data object that stores all the data
 	 */
-	public void KFF(){
+	public void KFF(Data data){
 		/*double[][] rData = { 
 				{1,0,0,0},
 				{0,1,0,0},
@@ -55,7 +56,6 @@ public class Filter {
 				{0}
 		};
 		SimpleMatrix xHatOld = new SimpleMatrix(xHat0Dat);
-		Data data = new Data();
 		int kMax = data.length();
 		int i = 0;
 		while( i<kMax){
@@ -125,7 +125,12 @@ public class Filter {
 		SimpleMatrix Z = new SimpleMatrix(tempDat);
 		return Z;
 	}
-	
+	/**
+	 * Will store the data, converts from quaternion to euler and puts it in the data array
+	 * @param i The place in the array to store
+	 * @param quat The matrix with the quaternions to store
+	 * @param data The data object in which to store the data
+	 */
 	private void storeData(int i, SimpleMatrix quat, Data data){
 		double q0 = quat.get(0, 0);
 		double q1 = quat.get(1, 0);
