@@ -148,7 +148,7 @@ public class Data {
 				fRoll.add(i,filteredArray[i][0]);
 				fPitch.add(i,filteredArray[i][1]);
 				fYaw.add(i,filteredArray[i][2]);
-				System.out.println(filteredArray[i][1]);
+				//System.out.println(filteredArray[i][1]);
 				i++;
 			}
 

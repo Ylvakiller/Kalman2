@@ -81,32 +81,32 @@ public class Runner {
 
 		JToggleButton btnGR = new JToggleButton("Gyro Roll");
 
-		btnGR.setSelected(true);
+		btnGR.setSelected(false);
 		btnGR.setBounds(0, 11, 121, 23);
 		buttonPanel.add(btnGR);
 
 		JToggleButton btnGP = new JToggleButton("Gyro Pitch");
-		btnGP.setSelected(true);
+		btnGP.setSelected(false);
 		btnGP.setBounds(0, 36, 121, 23);
 		buttonPanel.add(btnGP);
 
 		JToggleButton btnGY = new JToggleButton("Gyro Yaw");
-		btnGY.setSelected(true);
+		btnGY.setSelected(false);
 		btnGY.setBounds(0, 61, 121, 23);
 		buttonPanel.add(btnGY);
 
 		JToggleButton btnAX = new JToggleButton("Accel X");
-		btnAX.setSelected(true);
+		btnAX.setSelected(false);
 		btnAX.setBounds(0, 86, 121, 23);
 		buttonPanel.add(btnAX);
 
 		JToggleButton btnAY = new JToggleButton("Accel Y");
-		btnAY.setSelected(true);
+		btnAY.setSelected(false);
 		btnAY.setBounds(0, 111, 121, 23);
 		buttonPanel.add(btnAY);
 
 		JToggleButton btnAZ = new JToggleButton("Accel Z");
-		btnAZ.setSelected(true);
+		btnAZ.setSelected(false);
 		btnAZ.setBounds(0, 136, 121, 23);
 		buttonPanel.add(btnAZ);
 
@@ -120,7 +120,7 @@ public class Runner {
 		//panel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		panel.setBounds(216, 11, 800, 500);
 
-		JFreeChart lineChart = ChartFactory.createXYLineChart("", "x", "value", Runner.createDataset(data.returnAllBase()),PlotOrientation.VERTICAL, true, true, false);
+		JFreeChart lineChart = ChartFactory.createXYLineChart("", "x", "value", Runner.createDataset(data.returnAllBase()),PlotOrientation.VERTICAL, true, true, true);
 		//ChartFactory.createLineChart(title, categoryAxisLabel, valueAxisLabel, dataset, orientation, legend, tooltips, urls)
 		lineChart.setBackgroundPaint(Color.lightGray);
 		final XYPlot plot = lineChart.getXYPlot();
@@ -130,12 +130,12 @@ public class Runner {
 		plot.setBackgroundPaint(Color.white);
 		plot.setDomainGridlinePaint(Color.lightGray);
 		plot.setRangeGridlinePaint(Color.lightGray);
-
+		plot.setRangeMinorGridlinesVisible(true);
+		plot.setRangeMinorGridlinePaint(Color.lightGray);
 		final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
 		//renderer.setSeriesLi
 		//renderer.setSeriesLinesVisible(5, false);
 
-		renderer.setShapesVisible(false);
 		renderer.setSeriesVisible(5, true);
 		renderer.setSeriesPaint(0, Color.black);
 		renderer.setSeriesPaint(1, Color.green);
@@ -154,32 +154,38 @@ public class Runner {
 
 		// settind default size
 
-
+		renderer.setSeriesVisible(0,btnGR.isSelected());
 		btnGR.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				renderer.setSeriesVisible(0,btnGR.isSelected());
 			}
 		});
+
+		renderer.setSeriesVisible(1,btnGP.isSelected());
 		btnGP.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				renderer.setSeriesVisible(1,btnGP.isSelected());
 			}
 		});
+		renderer.setSeriesVisible(2,btnGY.isSelected());
 		btnGY.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				renderer.setSeriesVisible(2,btnGY.isSelected());
 			}
 		});
+		renderer.setSeriesVisible(3,btnAX.isSelected());
 		btnAX.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				renderer.setSeriesVisible(3,btnAX.isSelected());
 			}
 		});
+		renderer.setSeriesVisible(4,btnAY.isSelected());
 		btnAY.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				renderer.setSeriesVisible(4,btnAY.isSelected());
 			}
 		});
+		renderer.setSeriesVisible(5,btnAZ.isSelected());
 		btnAZ.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				renderer.setSeriesVisible(5,btnAZ.isSelected());
@@ -211,6 +217,9 @@ public class Runner {
 		filter.KFF(data);
 		plot.setDataset(1, data.createFilteredDataset());
 		plot.setRenderer(1, new XYLineAndShapeRenderer());
+		final XYLineAndShapeRenderer rend = (XYLineAndShapeRenderer) plot.getRenderer(1);
+		renderer.setShapesVisible(false);
+		rend.setShapesVisible(false);
 	}
 	/**
 	 * This creates a dataset for the chart from the input data

@@ -58,44 +58,49 @@ public class Filter {
 		SimpleMatrix xHatOld = new SimpleMatrix(xHat0Dat);
 		int kMax = data.length();
 		int i = 0;
+		double pIntValue = 0;
 		while( i<kMax){
 			float[] newDat=data.getNextBaseValue();
-			float pValue = newDat[0];
-			float qValue = newDat[1];
-			float rValue = newDat[2];
+			double pValue = Math.toRadians(newDat[0]);
+			double qValue = Math.toRadians(newDat[1]);
+			double rValue = Math.toRadians(newDat[2]);
+			
 			double[][] aDat={
-					{1,-pValue,-qValue,-rValue},
-					{pValue,1,rValue,-qValue},
-					{qValue,-rValue,1,pValue},
-					{rValue,qValue,-pValue,1}
+					{0,-pValue,-qValue,-rValue},
+					{pValue,0,rValue,-qValue},
+					{qValue,-rValue,0,pValue},
+					{rValue,qValue,-pValue,0}
 			};
 			
 			SimpleMatrix a = new SimpleMatrix(aDat);
+			a.scale(0.1/2);
+			a.plus(SimpleMatrix.identity(4));
 			double[][] qDat = {
-					{1,0,0,0},
-					{0,1,0,0},
-					{0,0,1,0},	
-					{0,0,0,1}
+					{1E-4,0,0,0},
+					{0,1E-4,0,0},
+					{0,0,1E-4,0},	
+					{0,0,0,1E-4}
 			};
-			SimpleMatrix qBig =new SimpleMatrix(qDat);
 			double[][] rDat = {
-					{1,0,0,0},
-					{0,1,0,0},
-					{0,0,1,0},	
-					{0,0,0,1}
+					{10,0,0,0},
+					{0,10,0,0},
+					{0,0,10,0},	
+					{0,0,0,10}
 			};
 			SimpleMatrix rBig =new SimpleMatrix(rDat);
-			double T = 0.01;
-			a = a.scale(T/2);
+
+			SimpleMatrix qBig =new SimpleMatrix(qDat);
+			//double T = 0.01;
+			//a = a.scale(T/2);
 			double g = 9.81;
-			double theta = 1/(Math.sin(Math.toRadians(newDat[3])/g));
-			double phi = 1/(Math.sin(-Math.toRadians(newDat[4])/(g*Math.cos(theta))));//different from randy's code, however mathematically correct this time
+			double theta = (Math.asin((newDat[3])/g)); 
+			double phi = (Math.asin(-(newDat[4])/(g*Math.cos(theta))));//different from randy's code, however mathematically correct this time
 			double omega = 0;//It appears that randy had a small mistake in his math, this code is the correct code according to the doc
 			SimpleMatrix Z = this.toQuaternion(theta,phi,omega);
 			SimpleMatrix xHatEstimate = a.mult(xHatOld);
 			pEst = a.mult(pOld).mult(a.transpose()).plus(qBig);
 			SimpleMatrix K = pEst.mult(H.transpose()).mult((H.mult(pEst).mult(H.transpose()).plus(rBig)).invert());
-			xHat = xHatEstimate.plus(K.mult(Z.minus(H.mult(xHatEstimate))));
+			xHat = xHatEstimate.plus(K.mult((Z.minus(H.mult(xHatEstimate)))));
 			P = pEst.minus(K.mult(H).mult(pEst));
 			pOld=P;
 			xHatOld = xHat;
@@ -136,12 +141,13 @@ public class Filter {
 		double q1 = quat.get(1, 0);
 		double q2 = quat.get(2, 0);
 		double q3 = quat.get(3, 0);
-		double roll = Math.atan2(2*(q0*q1+q2*q3), (1-2*(q1*q1+q2*q2)));
+		double roll = (Math.atan2(2*(q0*q1+q2*q3), (1-2*(q1*q1+q2*q2))));
 
-		double pitch = Math.asin(2*(q0*q2-q1*q3));
+		double pitch = (Math.asin(2*(q0*q2-q1*q3)));
 
-		double yaw = Math.atan2(2*(q0*q3+q1*q2), (1-2*(q2*q2+q3*q3)));
-		data.setFilteredData(i, (float)roll,  (float)pitch,  (float)yaw);
+		double yaw = (Math.atan2(2*(q0*q3+q1*q2), (1-2*(q2*q2+q3*q3))));
+		
+		data.setFilteredData(i, (float)Math.toDegrees(roll),  (float)Math.toDegrees(pitch),  (float)Math.toDegrees(yaw));
 		/*
 		 * var array = [];
 				array[0] = Math.degrees(Math.atan2(2*(q0*q1+q2*q3),1-2*(q1*q1+q2*q2)));
