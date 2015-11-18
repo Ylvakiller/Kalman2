@@ -60,11 +60,15 @@ public class Filter {
 		int i = 0;
 		double pIntValue = 0;
 		while( i<kMax){
-			float[] newDat=data.getNextBaseValue();
+			float[] newDat=data.getNextBaseValue();/*
 			double pValue = Math.toRadians(newDat[0]);
 			double qValue = Math.toRadians(newDat[1]);
 			double rValue = Math.toRadians(newDat[2]);
-			
+			*/
+
+			double pValue = newDat[0];
+			double qValue = newDat[1];
+			double rValue = newDat[2];
 			double[][] aDat={
 					{0,-pValue,-qValue,-rValue},
 					{pValue,0,rValue,-qValue},
@@ -72,9 +76,9 @@ public class Filter {
 					{rValue,qValue,-pValue,0}
 			};
 			
-			SimpleMatrix a = new SimpleMatrix(aDat);
-			a.scale(0.1/2);
-			a.plus(SimpleMatrix.identity(4));
+			SimpleMatrix a = SimpleMatrix.identity(4).plus((new SimpleMatrix(aDat).scale(0.01/2)));
+			//a.scale(0.1/2);
+			//a.plus(SimpleMatrix.identity(4));
 			double[][] qDat = {
 					{1E-4,0,0,0},
 					{0,1E-4,0,0},
@@ -92,9 +96,9 @@ public class Filter {
 			SimpleMatrix qBig =new SimpleMatrix(qDat);
 			//double T = 0.01;
 			//a = a.scale(T/2);
-			double g = 9.81;
-			double theta = (Math.asin((newDat[3])/g)); 
-			double phi = (Math.asin(-(newDat[4])/(g*Math.cos(theta))));//different from randy's code, however mathematically correct this time
+			double g = 9.807;
+			double theta = (Math.asin(((newDat[3]))/g)); 
+			double phi = (Math.asin((-(newDat[4]))/(g*Math.cos(theta))));//different from randy's code, however mathematically correct this time
 			double omega = 0;//It appears that randy had a small mistake in his math, this code is the correct code according to the doc
 			SimpleMatrix Z = this.toQuaternion(theta,phi,omega);
 			SimpleMatrix xHatEstimate = a.mult(xHatOld);
@@ -103,6 +107,9 @@ public class Filter {
 			xHat = xHatEstimate.plus(K.mult((Z.minus(H.mult(xHatEstimate)))));
 			P = pEst.minus(K.mult(H).mult(pEst));
 			pOld=P;
+			if(i==10){
+				pOld.print(10, 10);
+			}
 			xHatOld = xHat;
 			this.storeData(i, xHat, data);
 			i++;
@@ -123,9 +130,9 @@ public class Filter {
 		omega = omega/2;
 		double[][] tempDat={	//quaternion data
 				{Math.cos(phi)*Math.cos(theta)*Math.cos(omega)+Math.sin(phi)*Math.sin(theta)*Math.sin(omega)},
-				{Math.sin(phi)*Math.cos(theta)*Math.cos(omega)+Math.cos(phi)*Math.sin(theta)*Math.sin(omega)},
+				{Math.sin(phi)*Math.cos(theta)*Math.cos(omega)-Math.cos(phi)*Math.sin(theta)*Math.sin(omega)},
 				{Math.cos(phi)*Math.sin(theta)*Math.cos(omega)+Math.sin(phi)*Math.cos(theta)*Math.sin(omega)},
-				{Math.cos(phi)*Math.cos(theta)*Math.sin(omega)+Math.sin(phi)*Math.sin(theta)*Math.cos(omega)}
+				{Math.cos(phi)*Math.cos(theta)*Math.sin(omega)-Math.sin(phi)*Math.sin(theta)*Math.cos(omega)}
 		};
 		SimpleMatrix Z = new SimpleMatrix(tempDat);
 		return Z;
@@ -141,6 +148,7 @@ public class Filter {
 		double q1 = quat.get(1, 0);
 		double q2 = quat.get(2, 0);
 		double q3 = quat.get(3, 0);
+		
 		double roll = (Math.atan2(2*(q0*q1+q2*q3), (1-2*(q1*q1+q2*q2))));
 
 		double pitch = (Math.asin(2*(q0*q2-q1*q3)));
