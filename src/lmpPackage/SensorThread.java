@@ -6,8 +6,14 @@ package lmpPackage;
  */
 public class SensorThread extends Thread {
 
+	/**
+	 * This is the address as stored for the accelerometer on this sensor node
+	 */
 	private int axlAddress;
 	
+	/**
+	 * This is the address as stored for the gyroscope on this sensor node
+	 */
 	private int gyrAddress;
 	/**
 	 * This is the constructor to use, sets the addresses of the sensors on this node
