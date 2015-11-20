@@ -9,25 +9,25 @@ public class DataThread {
 	/**
 	 * Will hold all the data
 	 */
-	private ArrayList<float[]> dataArray;
+	private ArrayList<double[]> dataArray;
 	/**
 	 * Default constructor, added for convention sakes
 	 */
 	public DataThread(){
-		
+		dataArray = new ArrayList<double[]>();
 	}
 	
 	/**
 	 * Will add the given data to the end of the arrayList
-	 * @param pitch The pitch value to store
-	 * @param roll The roll value to store
-	 * @param yaw The yaw value to store
+	 * @param dummy The pitch value to store
+	 * @param dummy2 The roll value to store
+	 * @param dummy3 The yaw value to store
 	 */
-	public void addData(float pitch, float roll, float yaw){
-		float[] temp = new float[3];
-		temp[0] = pitch;
-		temp[1] = roll;
-		temp[2] = yaw;
+	public void addData(double dummy, double dummy2, double dummy3){
+		double[] temp = new double[3];
+		temp[0] = dummy;
+		temp[1] = dummy2;
+		temp[2] = dummy3;
 		dataArray.add(temp);
 	}
 	
@@ -36,8 +36,8 @@ public class DataThread {
 	 * @param i The index to return
 	 * @return The float array stored at i
 	 */
-	public float[] getData(int i){
-		if(dataArray.size()>i){
+	public double[] getData(int i){
+		if(dataArray.size()<=i){
 			System.err.println("|ERROR|Cannot return a value that is not stored in the array.\nYou requested value "+ i + " and the array only has "+ dataArray.size() + " values");
 			throw new ArrayIndexOutOfBoundsException();
 		}else{
@@ -48,7 +48,7 @@ public class DataThread {
 	 * Getter for the arrayList if needed
 	 * @return The arrayList which holds all the data
 	 */
-	public ArrayList<float[]> getDataArray(){
+	public ArrayList<double[]> getDataArray(){
 		return dataArray;
 	}
 	/**
@@ -63,7 +63,7 @@ public class DataThread {
 
 		int i=0;
 		while(i<dataArray.size()){
-			float[] temp = dataArray.get(i);
+			double[] temp = dataArray.get(i);
 			fRoll.add(i,temp[0]);
 			fPitch.add(i,temp[1]);
 			fYaw.add(i,temp[2]);
@@ -76,5 +76,16 @@ public class DataThread {
 
 
 		return dataset;
+	}
+	/**
+	 * Will print the contents of the dataArray to the default outputstream
+	 * Used for debugging
+	 */
+	public void print(){
+		int i =0;
+		while(i<dataArray.size()){
+			System.out.println(this.getData(i)[0]);
+			i++;
+		}
 	}
 }
