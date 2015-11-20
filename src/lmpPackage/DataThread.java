@@ -28,5 +28,17 @@ public class DataThread {
 		dataArray.add(temp);
 	}
 	
-	
+	/**
+	 * Will return the specified line of data, will check if the line excists
+	 * @param i The index to return
+	 * @return The float array stored at i
+	 */
+	public float[] getData(int i){
+		if(dataArray.size()>i){
+			System.err.println("|ERROR|Cannot return a value that is not stored in the array.\nYou requested value "+ i + " and the array only has "+ dataArray.size() + " values");
+			throw new ArrayIndexOutOfBoundsException();
+		}else{
+			return dataArray.get(i);
+		}
+	}
 }
