@@ -96,5 +96,16 @@ public class SensorThread extends Thread {
 	public SensorThread(ThreadGroup arg0, Runnable arg1, String arg2, long arg3) {
 		super(arg0, arg1, arg2, arg3);
 	}
+	/**
+	 * This method will manage what this thread needs to do, we will divide this thread in different submethods, for example the one 
+	 */
+	public void run(){
+		if(axlAddress==0||gyrAddress==0){
+			System.err.println("|Error|One or more of the address are not set, please set these using the constructor");//This makes sure that there are addresses in the correct place
+		}else{
+			//The first time it runs it needs to run differently, therefore I will use a while method for all but the first runthough
+			
+		}
+	}
 
 }
