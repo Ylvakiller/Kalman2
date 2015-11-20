@@ -2,6 +2,9 @@ package lmpPackage;
 
 import java.util.ArrayList;
 
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+
 public class DataThread {
 	/**
 	 * Will hold all the data
@@ -40,5 +43,38 @@ public class DataThread {
 		}else{
 			return dataArray.get(i);
 		}
+	}
+	/**
+	 * Getter for the arrayList if needed
+	 * @return The arrayList which holds all the data
+	 */
+	public ArrayList<float[]> getDataArray(){
+		return dataArray;
+	}
+	/**
+	 * Will convert the arrayList to a dataSet to be used by a graph
+	 * @return The created DataSet
+	 */
+	public XYSeriesCollection getDataSet(){
+		XYSeries fRoll = new XYSeries("Filtered Roll");
+
+		XYSeries fPitch = new XYSeries("Filtered Pitch");
+		XYSeries fYaw = new XYSeries("Filtered Yaw");
+
+		int i=0;
+		while(i<dataArray.size()){
+			float[] temp = dataArray.get(i);
+			fRoll.add(i,temp[0]);
+			fPitch.add(i,temp[1]);
+			fYaw.add(i,temp[2]);
+			i++;
+		}
+		XYSeriesCollection dataset = new XYSeriesCollection();
+		dataset.addSeries(fRoll);
+		dataset.addSeries(fPitch);
+		dataset.addSeries(fYaw);
+
+
+		return dataset;
 	}
 }
