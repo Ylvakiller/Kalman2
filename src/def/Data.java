@@ -45,7 +45,7 @@ public class Data {
 	}
 	/**
 	 * This method will return the specified row of data
-	 * @return an array of size 6 with the float values for the different datasets
+	 * @return An array of size 6 with the float values for the different datasets
 	 */
 	public float[] getNextBaseValue(){
 		float[] temp = new float[dataArray[0].length];//creates a new array with the length of one row of the base array
@@ -84,10 +84,10 @@ public class Data {
 
 	/**
 	 * With this method you can store data in the filteredDataArray
-	 * @param number The location in the array to store the data
-	 * @param roll The value of the current roll
-	 * @param pitch The value of the current pitch
-	 * @param yaw The value of the current yaw
+	 * @param Number The location in the array to store the data
+	 * @param Roll The value of the current roll
+	 * @param Pitch The value of the current pitch
+	 * @param Yaw The value of the current yaw
 	 */
 	public void setFilteredData(int number, float roll, float pitch, float yaw){
 
@@ -107,8 +107,8 @@ public class Data {
 
 	/**
 	 * This method will return a specific row of filteredData
-	 * @param row the row to send back
-	 * @return the row of data to be returned
+	 * @param Row the row to send back
+	 * @return The row of data to be returned
 	 */
 	public float[] getSpecificData(int row){
 		float[] temp = new float[3];
@@ -125,7 +125,7 @@ public class Data {
 	
 	/**
 	 * Will get the total size of the data stored
-	 * @return dataArray.length
+	 * @return DataArray.length
 	 */
 	public int length(){
 		return dataArray.length;
@@ -133,7 +133,7 @@ public class Data {
 	
 	/**
 	 * Transforms the filtereddata array into a dataSet for the graphs
-	 * @return the dataset with all the data
+	 * @return The dataset with all the data
 	 */
 	public XYSeriesCollection createFilteredDataset(){
 

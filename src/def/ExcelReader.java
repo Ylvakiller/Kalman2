@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class ExcelReader {
 	/**
 	 * This method will read in the data from the csv to a String format
-	 * @return returns an array of 20001 values, in 6 columns
+	 * @return Returns an array of 20001 values, in 6 columns
 	 */
  public static float[][] read(){
 	 Scanner scanner;

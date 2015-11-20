@@ -9,25 +9,11 @@ import org.ejml.simple.SimpleMatrix;
  *
  */
 public class Filter {
-	/*
-	 * steps we need to go to
-	 * 1, get new data
-	 * make new matrix A with gyro data
-	 * Calculate Xhat and P estimates
-	 * Compute Kalman gain
-	 * convert acc to euler anges 
-	 */
 	/**
 	 * Kalman Fusion filter
-	 * @param data the data object that stores all the data
+	 * @param data The data object that stores all the data
 	 */
 	public void KFF(Data data){
-		/*double[][] rData = { 
-				{1,0,0,0},
-				{0,1,0,0},
-				{0,0,1,0},
-				{0,0,0,1}};*/
-		//SimpleMatrix R = new SimpleMatrix(rData);
 		SimpleMatrix H = SimpleMatrix.identity(4);
 		double[][] xHatDat={
 				{1},
@@ -48,7 +34,6 @@ public class Filter {
 		SimpleMatrix pOld = SimpleMatrix.identity(4);
 		SimpleMatrix P = SimpleMatrix.identity(4);
 		
-		//System.out.println(P);
 		double[][] xHat0Dat = {
 				{1},
 				{0},
@@ -60,11 +45,7 @@ public class Filter {
 		int i = 0;
 		double pIntValue = 0;
 		while( i<kMax){
-			float[] newDat=data.getNextBaseValue();/*
-			double pValue = Math.toRadians(newDat[0]);
-			double qValue = Math.toRadians(newDat[1]);
-			double rValue = Math.toRadians(newDat[2]);
-			*/
+			float[] newDat=data.getNextBaseValue();
 
 			double pValue = newDat[0];
 			double qValue = newDat[1];
@@ -77,8 +58,7 @@ public class Filter {
 			};
 			
 			SimpleMatrix a = SimpleMatrix.identity(4).plus((new SimpleMatrix(aDat).scale(0.01/2)));
-			//a.scale(0.1/2);
-			//a.plus(SimpleMatrix.identity(4));
+			
 			double[][] qDat = {
 					{1E-4,0,0,0},
 					{0,1E-4,0,0},
@@ -94,12 +74,11 @@ public class Filter {
 			SimpleMatrix rBig =new SimpleMatrix(rDat);
 
 			SimpleMatrix qBig =new SimpleMatrix(qDat);
-			//double T = 0.01;
-			//a = a.scale(T/2);
+			
 			double g = 9.807;
 			double theta = (Math.asin(((newDat[3]))/g)); 
-			double phi = (Math.asin((-(newDat[4]))/(g*Math.cos(theta))));//different from randy's code, however mathematically correct this time
-			double omega = 0;//It appears that randy had a small mistake in his math, this code is the correct code according to the doc
+			double phi = (Math.asin((-(newDat[4]))/(g*Math.cos(theta))));
+			double omega = 0;
 			SimpleMatrix Z = this.toQuaternion(theta,phi,omega);
 			SimpleMatrix xHatEstimate = a.mult(xHatOld);
 			pEst = a.mult(pOld).mult(a.transpose()).plus(qBig);
@@ -119,9 +98,9 @@ public class Filter {
 	
 	/**
 	 * This method converts euler angles to quaternion values
-	 * @param theta The given euler roll
-	 * @param phi The given euler pitch
-	 * @param omega The given euler yaw
+	 * @param Theta The given euler roll
+	 * @param Phi The given euler pitch
+	 * @param Omega The given euler yaw
 	 * @return A matrix with the quaternion data
 	 */
 	private SimpleMatrix toQuaternion(double theta, double phi, double omega){
@@ -156,11 +135,5 @@ public class Filter {
 		double yaw = (Math.atan2(2*(q0*q3+q1*q2), (1-2*(q2*q2+q3*q3))));
 		
 		data.setFilteredData(i, (float)Math.toDegrees(roll),  (float)Math.toDegrees(pitch),  (float)Math.toDegrees(yaw));
-		/*
-		 * var array = [];
-				array[0] = Math.degrees(Math.atan2(2*(q0*q1+q2*q3),1-2*(q1*q1+q2*q2)));
-				array[1] = Math.degrees(Math.asin(2*(q0*q2-q3*q1)));
-				array[2] = Math.degrees(Math.atan2(2*(q0*q3+q1*q2),1-2*(q2*q2+q3*q3)));
-		 */
 	}
 }

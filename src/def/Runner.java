@@ -117,11 +117,11 @@ public class Runner {
 
 
 		JPanel panel = new JPanel();
-		//panel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		
 		panel.setBounds(216, 11, 800, 500);
 
 		JFreeChart lineChart = ChartFactory.createXYLineChart("", "x", "value", Runner.createDataset(data.returnAllBase()),PlotOrientation.VERTICAL, true, true, true);
-		//ChartFactory.createLineChart(title, categoryAxisLabel, valueAxisLabel, dataset, orientation, legend, tooltips, urls)
+		
 		lineChart.setBackgroundPaint(Color.lightGray);
 		final XYPlot plot = lineChart.getXYPlot();
 		lineChart.getLegend().setBackgroundPaint(Color.gray);
@@ -133,8 +133,7 @@ public class Runner {
 		plot.setRangeMinorGridlinesVisible(true);
 		plot.setRangeMinorGridlinePaint(Color.lightGray);
 		final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
-		//renderer.setSeriesLi
-		//renderer.setSeriesLinesVisible(5, false);
+		
 
 		renderer.setSeriesVisible(5, true);
 		renderer.setSeriesPaint(0, Color.black);
@@ -152,7 +151,6 @@ public class Runner {
 		domainAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 		ChartPanel chartPanel = new ChartPanel(lineChart);
 
-		// settind default size
 
 		renderer.setSeriesVisible(0,btnGR.isSelected());
 		btnGR.addActionListener(new ActionListener() {
@@ -223,8 +221,8 @@ public class Runner {
 	}
 	/**
 	 * This creates a dataset for the chart from the input data
-	 * @param floatArray the array to input, uses the format from the ExcelReader.read() method
-	 * @return a dataset that can be used to plot a graph
+	 * @param floatArray The array to input, uses the format from the ExcelReader.read() method
+	 * @return A dataset hat can be used to plot a graph
 	 */
 	private static XYDataset createDataset(float[][] floatArray) {
 
