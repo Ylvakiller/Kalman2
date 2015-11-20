@@ -109,7 +109,7 @@ public class SensorThread extends Thread {
 	public void run(){
 		if(axlAddress==0||gyrAddress==0){
 			System.err.println("|Error|One or more of the address are not set, please set these using the constructor");//This makes sure that there are addresses in the correct place
-		}else{
+		}else{/*
 			double[] dummy= new double[3];//dummy array, made for the sake of testing the DataThread class
 			int i =0;
 			while(i<10){
@@ -120,7 +120,7 @@ public class SensorThread extends Thread {
 				data.addData(dummy[0], dummy[1], dummy[2]);
 				i++;
 			}
-			data.print();
+			data.print();*/
 			//The first time it runs it needs to run differently, therefore I will use a while method for all but the first runthough
 			
 		}
