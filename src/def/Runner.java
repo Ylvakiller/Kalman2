@@ -48,7 +48,7 @@ public class Runner {
 		scrollPane.setBounds(10, 222, 200, 216);
 		jf.getContentPane().add(scrollPane);
 
-		JTextArea textArea = new JTextArea();
+		final JTextArea textArea = new JTextArea();
 		scrollPane.setViewportView(textArea);
 		//jf.pack();
 		OutputStream out = new OutputStream() {
@@ -70,7 +70,7 @@ public class Runner {
 
 		System.setOut(new PrintStream(out, true));
 		System.setErr(new PrintStream(out, true));
-		Data data = new Data();
+		final Data data = new Data();
 		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		jf.getContentPane().setLayout(null);
 		jf.setSize(1200, 600);
@@ -79,33 +79,33 @@ public class Runner {
 		jf.getContentPane().add(buttonPanel);
 		buttonPanel.setLayout(null);
 
-		JToggleButton btnGR = new JToggleButton("Gyro Roll");
+		final JToggleButton btnGR = new JToggleButton("Gyro Roll");
 
 		btnGR.setSelected(false);
 		btnGR.setBounds(0, 11, 121, 23);
 		buttonPanel.add(btnGR);
 
-		JToggleButton btnGP = new JToggleButton("Gyro Pitch");
+		final JToggleButton btnGP = new JToggleButton("Gyro Pitch");
 		btnGP.setSelected(false);
 		btnGP.setBounds(0, 36, 121, 23);
 		buttonPanel.add(btnGP);
 
-		JToggleButton btnGY = new JToggleButton("Gyro Yaw");
+		final JToggleButton btnGY = new JToggleButton("Gyro Yaw");
 		btnGY.setSelected(false);
 		btnGY.setBounds(0, 61, 121, 23);
 		buttonPanel.add(btnGY);
 
-		JToggleButton btnAX = new JToggleButton("Accel X");
+		final JToggleButton btnAX = new JToggleButton("Accel X");
 		btnAX.setSelected(false);
 		btnAX.setBounds(0, 86, 121, 23);
 		buttonPanel.add(btnAX);
 
-		JToggleButton btnAY = new JToggleButton("Accel Y");
+		final JToggleButton btnAY = new JToggleButton("Accel Y");
 		btnAY.setSelected(false);
 		btnAY.setBounds(0, 111, 121, 23);
 		buttonPanel.add(btnAY);
 
-		JToggleButton btnAZ = new JToggleButton("Accel Z");
+		final JToggleButton btnAZ = new JToggleButton("Accel Z");
 		btnAZ.setSelected(false);
 		btnAZ.setBounds(0, 136, 121, 23);
 		buttonPanel.add(btnAZ);
@@ -120,7 +120,7 @@ public class Runner {
 		
 		panel.setBounds(216, 11, 800, 500);
 
-		JFreeChart lineChart = ChartFactory.createXYLineChart("", "x", "value", Runner.createDataset(data.returnAllBase()),PlotOrientation.VERTICAL, true, true, true);
+		final JFreeChart lineChart = ChartFactory.createXYLineChart("", "x", "value", Runner.createDataset(data.returnAllBase()),PlotOrientation.VERTICAL, true, true, true);
 		
 		lineChart.setBackgroundPaint(Color.lightGray);
 		final XYPlot plot = lineChart.getXYPlot();
