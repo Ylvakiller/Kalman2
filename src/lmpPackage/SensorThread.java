@@ -18,7 +18,7 @@ public class SensorThread extends Thread {
 	/**
 	 * This is the object of the current thread in which the data is stored
 	 */
-	protected DataThread data;
+	protected DataThread dataThread;
 	/**
 	 * This is the constructor to use, sets the addresses of the sensors on this node
 	 * Creates a new data holder
@@ -29,7 +29,7 @@ public class SensorThread extends Thread {
 		super();
 		axlAddress = addressAxl;
 		gyrAddress = AddressGyr;
-		data= new DataThread();
+		dataThread= new DataThread();
 	}
 	
 	/**
@@ -110,6 +110,44 @@ public class SensorThread extends Thread {
 		if(axlAddress==0||gyrAddress==0){
 			System.err.println("|Error|One or more of the address are not set, please set these using the constructor");//This makes sure that there are addresses in the correct place
 		}else{
+			System.out.println(Integer.toHexString(axlAddress));
+
+			System.out.println(Integer.toHexString(gyrAddress));
+			//Start by requesting new data from each sensor
+			long[] temp = new long[2];
+			temp[0] = currentThread().getId();
+			temp[1] = gyrAddress;
+			System.out.println("Attempting to send address " + Long.toHexString(temp[1]));
+			System.out.println(CommunicationThread.commandQueue.offer(temp));
+			
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {//For some reason if I leave out this array it will send the second address twice
+				e.printStackTrace();//I have not been able to figure out why this happens and I will follow up as soon as I have an answer
+			}
+			temp[1] = axlAddress;
+			
+			System.out.println("Attempting to send address " + Long.toHexString(temp[1]));
+			System.out.println(CommunicationThread.commandQueue.offer(temp));
+			//New Data has been requested, time to see if it has the old data already.
+			boolean gettingData = true;
+			float[] data;
+			while(gettingData){
+				 data = CommunicationThread.dataQueue.peek();
+				 if (data==null){
+					 //This is just to check if there is something in the dataQueue
+				 }else if (data[0]==currentThread().getId()){
+					 try {
+						data = CommunicationThread.dataQueue.take();//Remove the data so that the next thread can read their data from the HEAD
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					gettingData=false;
+				 }
+			}
+			//Right here we have asked for new data, gotten the old data and can start processing this old data
+			
+			
 			double[] dummy= new double[3];//dummy array, made for the sake of testing the DataThread class
 			int i =0;
 			while(i<10){
@@ -117,9 +155,10 @@ public class SensorThread extends Thread {
 				dummy[0] = Math.random();
 				dummy[1] = Math.random();
 				dummy[2] = Math.random();
-				data.addData(dummy[0], dummy[1], dummy[2]);
+				dataThread.addData(dummy[0], dummy[1], dummy[2]);
 				i++;
 			}
+			
 			//data.print();
 			//The first time it runs it needs to run differently, therefore I will use a while method for all but the first runthough
 			
