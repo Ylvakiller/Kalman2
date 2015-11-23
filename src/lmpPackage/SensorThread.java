@@ -110,25 +110,30 @@ public class SensorThread extends Thread {
 		if(axlAddress==0||gyrAddress==0){
 			System.err.println("|Error|One or more of the address are not set, please set these using the constructor");//This makes sure that there are addresses in the correct place
 		}else{
+			/*
 			System.out.println(Integer.toHexString(axlAddress));
 
-			System.out.println(Integer.toHexString(gyrAddress));
+			System.out.println(Integer.toHexString(gyrAddress));*/
 			//Start by requesting new data from each sensor
 			long[] temp = new long[2];
 			temp[0] = currentThread().getId();
 			temp[1] = gyrAddress;
-			System.out.println("Attempting to send address " + Long.toHexString(temp[1]));
-			System.out.println(CommunicationThread.commandQueue.offer(temp));
-
+			//System.out.println("Attempting to send address " + Long.toHexString(temp[1]));
+			boolean tempBool = false;
+			while(!tempBool){
+				tempBool = CommunicationThread.commandQueue.offer(temp);
+				System.out.println(tempBool);
+			}
+			System.out.println( Long.toHexString(temp[1]));
 			try {
-				Thread.sleep(1);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {//For some reason if I leave out this array it will send the second address twice
 				e.printStackTrace();//I have not been able to figure out why this happens and I will follow up as soon as I have an answer
 			}
 			temp[1] = axlAddress;
 
-			System.out.println("Attempting to send address " + Long.toHexString(temp[1]));
-			System.out.println(CommunicationThread.commandQueue.offer(temp));
+			//System.out.println("Attempting to send address " + Long.toHexString(temp[1]));
+			CommunicationThread.commandQueue.offer(temp);
 			//New Data has been requested, time to see if it has the old data already.
 			String[] data;
 			int i=0;
@@ -156,7 +161,7 @@ public class SensorThread extends Thread {
 			double[] dummy= new double[3];//dummy array, made for the sake of testing the DataThread class
 			i =0;
 			while(i<10){
-				System.out.println(i);
+				//System.out.println(i);
 				dummy[0] = Math.random();
 				dummy[1] = Math.random();
 				dummy[2] = Math.random();
