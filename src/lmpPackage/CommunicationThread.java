@@ -20,13 +20,16 @@ public class CommunicationThread extends Thread {
 	 * float[4] Data 2 e.g. acceleration Y
 	 * float[5] Data 3 e.g. acceleration Z
 	 */
-	protected static BlockingQueue<float[]> dataQueue;
+	protected static BlockingQueue<String[]> dataQueue;
 
 	/**
 	 * This is the amount of sensors each node has, used to calculate the size of the queues
 	 */
 	private static final int amountOfSensorsPerNode = 2;
 
+	/**
+	 * This variable will make absolutely sure that the correct constructor is called
+	 */
 	private boolean initialised = false;
 	/**
 	 * Constructor to use.
@@ -38,7 +41,7 @@ public class CommunicationThread extends Thread {
 	 */
 	public CommunicationThread(int amountOfThreads){
 		commandQueue = new ArrayBlockingQueue<long[]>(amountOfThreads*2*amountOfSensorsPerNode);
-		dataQueue = new ArrayBlockingQueue<float[]>(amountOfThreads*2*amountOfSensorsPerNode);
+		dataQueue = new ArrayBlockingQueue<String[]>(amountOfThreads*2*amountOfSensorsPerNode);
 		initialised = true;
 	}
 
@@ -62,9 +65,25 @@ public class CommunicationThread extends Thread {
 					if (command.length!=2){
 						throw new ArrayIndexOutOfBoundsException("The command given is of incorrect format");
 					}else{
-						 System.out.println("The thread with thread id " + command[0] + " has given the command to get data from address " +Long.toHexString(command[1]));
+						System.out.println("The thread with thread id " + command[0] + " has given the command to get data from address " +Long.toHexString(command[1]));
+						//In this part the program should communicate with the sensors, for this I need Junior his code which is not available due to him not being here
+						//For now I will just hold this method with a delay to simulate the communication and then send some random data back
+
+						try {
+							Thread.sleep(150);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						String[] response =  new String[6];
+						response[0] = Long.toString(command[0]);
+						response[1] = Long.toHexString(command[1]);
+						response[2] = Long.toString(System.currentTimeMillis());
+						response[3] ="0";
+						response[4] ="0";
+						response[5] ="0";
+						CommunicationThread.dataQueue.offer(response);
 					}
-					
+
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
