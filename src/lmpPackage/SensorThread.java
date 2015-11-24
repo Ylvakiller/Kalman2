@@ -115,25 +115,23 @@ public class SensorThread extends Thread {
 
 			System.out.println(Integer.toHexString(gyrAddress));*/
 			//Start by requesting new data from each sensor
-			long[] temp = new long[2];
-			temp[0] = currentThread().getId();
-			temp[1] = gyrAddress;
+			long[] command1 = new long[2];
+			command1[0] = currentThread().getId();
+			command1[1] = gyrAddress;
 			//System.out.println("Attempting to send address " + Long.toHexString(temp[1]));
 			boolean tempBool = false;
 			while(!tempBool){
-				tempBool = CommunicationThread.commandQueue.offer(temp);
+				tempBool = CommunicationThread.commandQueue.offer(command1);
 				System.out.println(tempBool);
 			}
-			System.out.println( Long.toHexString(temp[1]));
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {//For some reason if I leave out this array it will send the second address twice
-				e.printStackTrace();//I have not been able to figure out why this happens and I will follow up as soon as I have an answer
-			}
-			temp[1] = axlAddress;
+			System.out.println( Long.toHexString(command1[1]));
+			
+			long[] command2 = new long[2];
+			command2[0] = currentThread().getId();
+			command2[1] = axlAddress;
 
 			//System.out.println("Attempting to send address " + Long.toHexString(temp[1]));
-			CommunicationThread.commandQueue.offer(temp);
+			CommunicationThread.commandQueue.offer(command2);
 			//New Data has been requested, time to see if it has the old data already.
 			String[] data;
 			int i=0;
