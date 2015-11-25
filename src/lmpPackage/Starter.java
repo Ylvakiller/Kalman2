@@ -3,6 +3,7 @@ package lmpPackage;
 public class Starter {
 
 	public static void main(String[] args) {
+		long runtime = System.currentTimeMillis();
 		System.out.println("test");
 		CommunicationThread com =  new CommunicationThread(1);
 		SensorThread sensor1 = new SensorThread((byte) 0x34, (byte)0x44);
@@ -17,6 +18,7 @@ public class Starter {
 			e.printStackTrace();//I have not been able to figure out why this happens and I will follow up as soon as I have an answer
 		}
 		System.out.println(sensor1.getLast());
+		System.out.println("runtime = " + (System.currentTimeMillis()-runtime));
 		System.exit(0);
 		//sensor1.dataThread.print();
 	}
