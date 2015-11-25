@@ -313,4 +313,12 @@ public class SensorThread extends Thread {
 	public synchronized DataThread getStore() {
 		return store;
 	}
+	
+	/**
+	 * Get the last stored data
+	 * @return A double array with the last values in it
+	 */
+	public synchronized double[] getLast() {
+		return store.getLastData();
+	}
 }

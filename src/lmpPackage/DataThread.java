@@ -44,6 +44,14 @@ public class DataThread {
 			return dataArray.get(i);
 		}
 	}
+	
+	/**
+	 * Get the most recent filtered data
+	 * @return the last data in the object
+	 */
+	public double[] getLastData(){
+		return dataArray.get(dataArray.size()-1);
+	}
 	/**
 	 * Getter for the arrayList if needed
 	 * @return The arrayList which holds all the data
