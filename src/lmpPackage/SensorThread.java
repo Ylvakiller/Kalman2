@@ -9,7 +9,7 @@ import org.ejml.simple.SimpleMatrix;
  *
  */
 public class SensorThread extends Thread {
-
+	private DataThread store;
 	/**
 	 * This is the address as stored for the accelerometer on this sensor node
 	 */
@@ -20,10 +20,6 @@ public class SensorThread extends Thread {
 	 */
 	private int gyrAddress;
 	/**
-	 * This is the object of the current thread in which the data is stored
-	 */
-	protected DataThread dataThread;
-	/**
 	 * This is the constructor to use, sets the addresses of the sensors on this node
 	 * Creates a new data holder
 	 * @param addressAxl The address of the accelerometer
@@ -33,7 +29,7 @@ public class SensorThread extends Thread {
 		super();
 		axlAddress = addressAxl;
 		gyrAddress = AddressGyr;
-		dataThread= new DataThread();
+		store = new DataThread();
 	}
 
 	/**
@@ -145,7 +141,7 @@ public class SensorThread extends Thread {
 		SimpleMatrix pEst = SimpleMatrix.identity(4);
 		SimpleMatrix pOld = SimpleMatrix.identity(4);
 		SimpleMatrix P = SimpleMatrix.identity(4);
-		
+
 		double[][] xHat0Dat = {
 				{1},
 				{0},
@@ -154,8 +150,8 @@ public class SensorThread extends Thread {
 		};
 		SimpleMatrix xHatOld = new SimpleMatrix(xHat0Dat);
 		double pIntValue = 0;
-		
-		DataThread store = new DataThread();
+
+
 		long oldTime = System.currentTimeMillis();
 		while(true){
 			if(axlAddress==0||gyrAddress==0){
@@ -234,9 +230,9 @@ public class SensorThread extends Thread {
 						{qValue,-rValue,0,pValue},
 						{rValue,qValue,-pValue,0}
 				};
-				
+
 				SimpleMatrix a = SimpleMatrix.identity(4).plus((new SimpleMatrix(aDat).scale((deltaTime*1000)/2)));
-				
+
 				double[][] qDat = {
 						{1E-4,0,0,0},
 						{0,1E-4,0,0},
@@ -252,7 +248,7 @@ public class SensorThread extends Thread {
 				SimpleMatrix rBig =new SimpleMatrix(rDat);
 
 				SimpleMatrix qBig =new SimpleMatrix(qDat);
-				
+
 				double g = 9.807;
 				double theta = (Math.asin(((accelDat[0]))/g)); 
 				double phi = (Math.asin((-(accelDat[1]))/(g*Math.cos(theta))));
@@ -290,7 +286,7 @@ public class SensorThread extends Thread {
 		SimpleMatrix Z = new SimpleMatrix(tempDat);
 		return Z;
 	}
-	
+
 	/**
 	 * Will store the data, converts from quaternion to euler and puts it in the data array
 	 * @param quat The matrix with the quaternions to store
@@ -301,12 +297,20 @@ public class SensorThread extends Thread {
 		double q1 = quat.get(1, 0);
 		double q2 = quat.get(2, 0);
 		double q3 = quat.get(3, 0);
-		
+
 		double roll = (Math.atan2(2*(q0*q1+q2*q3), (1-2*(q1*q1+q2*q2))));
 
 		double pitch = (Math.asin(2*(q0*q2-q1*q3)));
 
 		double yaw = (Math.atan2(2*(q0*q3+q1*q2), (1-2*(q2*q2+q3*q3))));
 		store.addData((float)Math.toDegrees(roll), (float)Math.toDegrees(pitch), (float)Math.toDegrees(yaw));
-		}
+	}
+
+	/**
+	 * Returns what is currently stored
+	 * @return the object that holds all the data
+	 */
+	public synchronized DataThread getStore() {
+		return store;
+	}
 }
