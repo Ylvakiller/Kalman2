@@ -260,7 +260,7 @@ public class SensorThread extends Thread {
 				P = pEst.minus(K.mult(H).mult(pEst));
 				pOld=P;
 				xHatOld = xHat;
-				//this.storeData(i, xHat, data);//output data
+				this.storeData(xHat, store);//output data
 			}
 		}
 	}
@@ -288,11 +288,10 @@ public class SensorThread extends Thread {
 	
 	/**
 	 * Will store the data, converts from quaternion to euler and puts it in the data array
-	 * @param i The place in the array to store
 	 * @param quat The matrix with the quaternions to store
 	 * @param data The data object in which to store the data
 	 */
-	private void storeData(int i, SimpleMatrix quat, DataThread store){
+	private void storeData(SimpleMatrix quat, DataThread store){
 		double q0 = quat.get(0, 0);
 		double q1 = quat.get(1, 0);
 		double q2 = quat.get(2, 0);
