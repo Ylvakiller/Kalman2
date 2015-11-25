@@ -19,15 +19,15 @@ public class DataThread {
 	
 	/**
 	 * Will add the given data to the end of the arrayList
-	 * @param dummy The pitch value to store
-	 * @param dummy2 The roll value to store
-	 * @param dummy3 The yaw value to store
+	 * @param roll The pitch value to store
+	 * @param pitch The roll value to store
+	 * @param yaw The yaw value to store
 	 */
-	public void addData(double dummy, double dummy2, double dummy3){
+	public void addData(double roll, double pitch, double yaw){
 		double[] temp = new double[3];
-		temp[0] = dummy;
-		temp[1] = dummy2;
-		temp[2] = dummy3;
+		temp[0] = roll;
+		temp[1] = pitch;
+		temp[2] = yaw;
 		dataArray.add(temp);
 	}
 	
