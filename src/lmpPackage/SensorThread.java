@@ -116,7 +116,7 @@ public class SensorThread extends Thread {
 	 * 1)Request new sensor data from both sensors
 	 * 2)Look at the head of the return queue and check if the head is data for this thread
 	 * 3)If the data is for this thread, take it out and continue, otherwise back to step 2
-	 * 4)Divide the data up in gyrosope and accelerometer data
+	 * 4)Divide the data up in gyroscope and accelerometer data
 	 * 5)Do one iteration of the filter
 	 * 6)Store the output
 	 * 7)Start at the start of the loop
@@ -176,8 +176,8 @@ public class SensorThread extends Thread {
 				String[] data;
 				float[] gyroDat = new float[3];
 				float[] accelDat = new float[3];
-				int i=0;
-				while(i!=2){
+				boolean gotAccel = false, gotGyro = false;
+				while(!gotAccel||!gotGyro){
 					data = CommunicationThread.dataQueue.peek();
 					if (data==null){
 						//This is just to check if there is something in the dataQueue
@@ -198,33 +198,24 @@ public class SensorThread extends Thread {
 								gyroDat[0] = Float.parseFloat(data[3]);
 								gyroDat[1] = Float.parseFloat(data[4]);
 								gyroDat[2] = Float.parseFloat(data[5]);
+								gotGyro=true;
 							}else if (temp==axlAddress){
 								//received data on accelerometer
 								accelDat[0] = Float.parseFloat(data[3]);
 								accelDat[1] = Float.parseFloat(data[4]);
 								accelDat[2] = Float.parseFloat(data[5]);
+								gotAccel = true;
 							}else{
 								//In this case the thread id was correct but the addresses where not
 								System.err.println("Something went wrong.\nThe communicationThread returned values for an address that this thread does not have.");
 								throw new IllegalThreadStateException("Data got back for a thread which could not use that data"); 
 							}
-							i++;
 						}
 					}
 				}
 				//Right here we have asked for new data, gotten the old data and can start processing this old data
 
 
-				double[] dummy= new double[3];//dummy array, made for the sake of testing the DataThread class
-				i =0;
-				while(i<10){
-					//System.out.println(i);
-					dummy[0] = Math.random();
-					dummy[1] = Math.random();
-					dummy[2] = Math.random();
-					dataThread.addData(dummy[0], dummy[1], dummy[2]);
-					i++;
-				}
 
 
 				//The first time it runs it needs to run differently, therefore I will use a while method for all but the first runthough
@@ -268,13 +259,8 @@ public class SensorThread extends Thread {
 				xHat = xHatEstimate.plus(K.mult((Z.minus(H.mult(xHatEstimate)))));
 				P = pEst.minus(K.mult(H).mult(pEst));
 				pOld=P;
-				if(i==10){
-					pOld.print(10, 10);
-				}
 				xHatOld = xHat;
 				//this.storeData(i, xHat, data);//output data
-				
-				i++;
 			}
 		}
 	}
