@@ -107,78 +107,80 @@ public class SensorThread extends Thread {
 	 * This method will manage what this thread needs to do, we will divide this thread in different submethods, for example the one 
 	 */
 	public void run(){
-		if(axlAddress==0||gyrAddress==0){
-			System.err.println("|Error|One or more of the address are not set, please set these using the constructor");//This makes sure that there are addresses in the correct place
-		}else{
-			//Start by requesting new data from each sensor
-			long[] command1 = new long[2];
-			command1[0] = currentThread().getId();
-			command1[1] = gyrAddress;
-			
-			CommunicationThread.commandQueue.offer(command1);
-				
-			
-			long[] command2 = new long[2];
-			command2[0] = currentThread().getId();
-			command2[1] = axlAddress;
-			CommunicationThread.commandQueue.offer(command2);
-			//New Data has been requested, time to see if it has the old data already.
-			String[] data;
-			float[] gyroDat = new float[3];
-			float[] accelDat = new float[3];
-			int i=0;
-			while(i!=2){
-				data = CommunicationThread.dataQueue.peek();
-				if (data==null){
-					//This is just to check if there is something in the dataQueue
-				}else {
-					//System.out.println(data[0] + "" +Integer.valueOf((data[0])));
-					if (Long.valueOf((data[0]))==currentThread().getId()){
-						//System.out.println("Response with id " + data[0] + " from sensor addresss " +data[1] + " was recieved at time " + data[2]);
-						try {
-							data = CommunicationThread.dataQueue.take();//Remove the data so that the next thread can read their data from the HEAD
-							
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}//In here it will have recieved one set of data, will need to run it again for the next set
-						
-						byte temp = Byte.parseByte(data[1], 16);//Converting the Hex String back to an int to check for the address
-						if(temp==gyrAddress){
-							//received data on gyroscope
-							gyroDat[0] = Float.parseFloat(data[3]);
-							gyroDat[1] = Float.parseFloat(data[4]);
-							gyroDat[2] = Float.parseFloat(data[5]);
-						}else if (temp==axlAddress){
-							//received data on accelerometer
-							accelDat[0] = Float.parseFloat(data[3]);
-							accelDat[1] = Float.parseFloat(data[4]);
-							accelDat[2] = Float.parseFloat(data[5]);
-						}else{
-							//In this case the thread id was correct but the addresses where not
-							System.err.println("Something went wrong.\nThe communicationThread returned values for an address that this thread does not have.");
-							throw new IllegalThreadStateException("Data got back for a thread which could not use that data"); 
+		while(true){
+			if(axlAddress==0||gyrAddress==0){
+				System.err.println("|Error|One or more of the address are not set, please set these using the constructor");//This makes sure that there are addresses in the correct place
+			}else{
+				//Start by requesting new data from each sensor
+				long[] command1 = new long[2];
+				command1[0] = currentThread().getId();
+				command1[1] = gyrAddress;
+
+				CommunicationThread.commandQueue.offer(command1);
+
+
+				long[] command2 = new long[2];
+				command2[0] = currentThread().getId();
+				command2[1] = axlAddress;
+				CommunicationThread.commandQueue.offer(command2);
+				//New Data has been requested, time to see if it has the old data already.
+				String[] data;
+				float[] gyroDat = new float[3];
+				float[] accelDat = new float[3];
+				int i=0;
+				while(i!=2){
+					data = CommunicationThread.dataQueue.peek();
+					if (data==null){
+						//This is just to check if there is something in the dataQueue
+					}else {
+						//System.out.println(data[0] + "" +Integer.valueOf((data[0])));
+						if (Long.valueOf((data[0]))==currentThread().getId()){
+							//System.out.println("Response with id " + data[0] + " from sensor addresss " +data[1] + " was recieved at time " + data[2]);
+							try {
+								data = CommunicationThread.dataQueue.take();//Remove the data so that the next thread can read their data from the HEAD
+
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}//In here it will have recieved one set of data, will need to run it again for the next set
+
+							byte temp = Byte.parseByte(data[1], 16);//Converting the Hex String back to an int to check for the address
+							if(temp==gyrAddress){
+								//received data on gyroscope
+								gyroDat[0] = Float.parseFloat(data[3]);
+								gyroDat[1] = Float.parseFloat(data[4]);
+								gyroDat[2] = Float.parseFloat(data[5]);
+							}else if (temp==axlAddress){
+								//received data on accelerometer
+								accelDat[0] = Float.parseFloat(data[3]);
+								accelDat[1] = Float.parseFloat(data[4]);
+								accelDat[2] = Float.parseFloat(data[5]);
+							}else{
+								//In this case the thread id was correct but the addresses where not
+								System.err.println("Something went wrong.\nThe communicationThread returned values for an address that this thread does not have.");
+								throw new IllegalThreadStateException("Data got back for a thread which could not use that data"); 
+							}
+							i++;
 						}
-						i++;
 					}
 				}
+				//Right here we have asked for new data, gotten the old data and can start processing this old data
+
+
+				double[] dummy= new double[3];//dummy array, made for the sake of testing the DataThread class
+				i =0;
+				while(i<10){
+					//System.out.println(i);
+					dummy[0] = Math.random();
+					dummy[1] = Math.random();
+					dummy[2] = Math.random();
+					dataThread.addData(dummy[0], dummy[1], dummy[2]);
+					i++;
+				}
+
+
+				//The first time it runs it needs to run differently, therefore I will use a while method for all but the first runthough
+
 			}
-			//Right here we have asked for new data, gotten the old data and can start processing this old data
-		
-
-			double[] dummy= new double[3];//dummy array, made for the sake of testing the DataThread class
-			i =0;
-			while(i<10){
-				//System.out.println(i);
-				dummy[0] = Math.random();
-				dummy[1] = Math.random();
-				dummy[2] = Math.random();
-				dataThread.addData(dummy[0], dummy[1], dummy[2]);
-				i++;
-			}
-
-			
-			//The first time it runs it needs to run differently, therefore I will use a while method for all but the first runthough
-
 		}
 	}
 
