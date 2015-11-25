@@ -108,7 +108,19 @@ public class SensorThread extends Thread {
 		super(arg0, arg1, arg2, arg3);
 	}
 	/**
-	 * This method will manage what this thread needs to do, we will divide this thread in different submethods, for example the one 
+	 * This is the running of the sensor thread. 
+	 * The thread starts with initialising base values needed for the filter.
+	 * 		This means things like X0 and similar things
+	 * It will then go into its infinite loop
+	 * In this loop it will run the following procedure:
+	 * 1)Request new sensor data from both sensors
+	 * 2)Look at the head of the return queue and check if the head is data for this thread
+	 * 3)If the data is for this thread, take it out and continue, otherwise back to step 2
+	 * 4)Divide the data up in gyrosope and accelerometer data
+	 * 5)Do one iteration of the filter
+	 * 6)Store the output
+	 * 7)Start at the start of the loop
+	 * 
 	 */
 	public void run(){
 		/*
