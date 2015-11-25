@@ -79,7 +79,7 @@ public class Filter {
 			double theta = (Math.asin(((newDat[3]))/g)); 
 			double phi = (Math.asin((-(newDat[4]))/(g*Math.cos(theta))));
 			double omega = 0;
-			SimpleMatrix Z = this.toQuaternion(theta,phi,omega);
+			SimpleMatrix Z = Filter.toQuaternion(theta,phi,omega);
 			SimpleMatrix xHatEstimate = a.mult(xHatOld);
 			pEst = a.mult(pOld).mult(a.transpose()).plus(qBig);
 			SimpleMatrix K = pEst.mult(H.transpose()).mult((H.mult(pEst).mult(H.transpose()).plus(rBig)).invert());
@@ -103,7 +103,7 @@ public class Filter {
 	 * @param Omega The given euler yaw
 	 * @return A matrix with the quaternion data
 	 */
-	private SimpleMatrix toQuaternion(double theta, double phi, double omega){
+	private static SimpleMatrix toQuaternion(double theta, double phi, double omega){
 		theta = theta/2;//Since the formula for the conversion between euler and quaternion only uses these values devided by 2 this is easier to do
 		phi = phi/2;
 		omega = omega/2;

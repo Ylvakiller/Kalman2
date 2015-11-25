@@ -1,4 +1,7 @@
 package lmpPackage;
+
+import org.ejml.simple.SimpleMatrix;
+
 /**
  * This class will do the filtering, will use an adapted version of the data class in the def package
  * @author Ylva
@@ -184,4 +187,24 @@ public class SensorThread extends Thread {
 		}
 	}
 
+	/**
+	 * This method converts euler angles to quaternion values
+	 * @param Theta The given euler roll
+	 * @param Phi The given euler pitch
+	 * @param Omega The given euler yaw
+	 * @return A matrix with the quaternion data
+	 */
+	private static SimpleMatrix toQuaternion(double theta, double phi, double omega){
+		theta = theta/2;//Since the formula for the conversion between euler and quaternion only uses these values devided by 2 this is easier to do
+		phi = phi/2;
+		omega = omega/2;
+		double[][] tempDat={	//quaternion data
+				{Math.cos(phi)*Math.cos(theta)*Math.cos(omega)+Math.sin(phi)*Math.sin(theta)*Math.sin(omega)},
+				{Math.sin(phi)*Math.cos(theta)*Math.cos(omega)-Math.cos(phi)*Math.sin(theta)*Math.sin(omega)},
+				{Math.cos(phi)*Math.sin(theta)*Math.cos(omega)+Math.sin(phi)*Math.cos(theta)*Math.sin(omega)},
+				{Math.cos(phi)*Math.cos(theta)*Math.sin(omega)-Math.sin(phi)*Math.sin(theta)*Math.cos(omega)}
+		};
+		SimpleMatrix Z = new SimpleMatrix(tempDat);
+		return Z;
+	}
 }
