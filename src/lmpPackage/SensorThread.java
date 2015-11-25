@@ -156,6 +156,7 @@ public class SensorThread extends Thread {
 		double pIntValue = 0;
 		
 		DataThread store = new DataThread();
+		long oldTime = System.currentTimeMillis();
 		while(true){
 			if(axlAddress==0||gyrAddress==0){
 				System.err.println("|Error|One or more of the address are not set, please set these using the constructor");//This makes sure that there are addresses in the correct place
@@ -177,6 +178,7 @@ public class SensorThread extends Thread {
 				float[] gyroDat = new float[3];
 				float[] accelDat = new float[3];
 				boolean gotAccel = false, gotGyro = false;
+				long timeAccel = 0,timeGyro = 0;
 				while(!gotAccel||!gotGyro){
 					data = CommunicationThread.dataQueue.peek();
 					if (data==null){
@@ -198,12 +200,14 @@ public class SensorThread extends Thread {
 								gyroDat[0] = Float.parseFloat(data[3]);
 								gyroDat[1] = Float.parseFloat(data[4]);
 								gyroDat[2] = Float.parseFloat(data[5]);
+								timeGyro = Long.parseLong(data[2]);
 								gotGyro=true;
 							}else if (temp==axlAddress){
 								//received data on accelerometer
 								accelDat[0] = Float.parseFloat(data[3]);
 								accelDat[1] = Float.parseFloat(data[4]);
 								accelDat[2] = Float.parseFloat(data[5]);
+								timeAccel = Long.parseLong(data[2]);
 								gotAccel = true;
 							}else{
 								//In this case the thread id was correct but the addresses where not
@@ -213,6 +217,7 @@ public class SensorThread extends Thread {
 						}
 					}
 				}
+				long deltaTime = (timeAccel+timeGyro)/2-oldTime;
 				//Right here we have asked for new data, gotten the old data and can start processing this old data
 
 
@@ -230,7 +235,7 @@ public class SensorThread extends Thread {
 						{rValue,qValue,-pValue,0}
 				};
 				
-				SimpleMatrix a = SimpleMatrix.identity(4).plus((new SimpleMatrix(aDat).scale(0.01/2)));
+				SimpleMatrix a = SimpleMatrix.identity(4).plus((new SimpleMatrix(aDat).scale((deltaTime*1000)/2)));
 				
 				double[][] qDat = {
 						{1E-4,0,0,0},
