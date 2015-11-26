@@ -167,16 +167,18 @@ public class SensorThread extends Thread {
 				System.err.println("|Error|One or more of the address are not set, please set these using the constructor");//This makes sure that there are addresses in the correct place
 			}else{
 				//Start by requesting new data from each sensor
-				long[] command1 = new long[2];
+				long[] command1 = new long[3];
 				command1[0] = currentThread().getId();
 				command1[1] = gyrAddress;
+				command1[2] = 0;
 
 				CommunicationThread.commandQueue.offer(command1);
 
 
-				long[] command2 = new long[2];
+				long[] command2 = new long[3];
 				command2[0] = currentThread().getId();
 				command2[1] = axlAddress;
+				command2[2] = 1;
 				CommunicationThread.commandQueue.offer(command2);
 				//New Data has been requested, time to see if it has the old data already.
 				String[] data;
