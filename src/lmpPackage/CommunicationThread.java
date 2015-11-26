@@ -92,11 +92,6 @@ public class CommunicationThread extends Thread {
 						// simulate the communication and then send some random
 						// data back
 
-						try {
-							Thread.sleep(150);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
 						String[] response = new String[6];
 						response[0] = Long.toString(command[0]);
 						response[1] = Long.toHexString(command[1]);
