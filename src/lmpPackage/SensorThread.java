@@ -10,8 +10,14 @@ import org.ejml.simple.SimpleMatrix;
  */
 public class SensorThread extends Thread {
 
+	/**
+	 * Used to let the threads sleep if they do not have anything to do but restart as soon as it is possible to do something again
+	 */
 	final static Object notifier = new Object();
 	
+	/**
+	 * An object on which the data is stored
+	 */
 	private DataThread store;
 	/**
 	 * This is the address as stored for the accelerometer on this sensor node
