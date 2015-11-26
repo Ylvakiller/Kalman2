@@ -9,6 +9,9 @@ import org.ejml.simple.SimpleMatrix;
  *
  */
 public class SensorThread extends Thread {
+
+	final static Object notifier = new Object();
+	
 	private DataThread store;
 	/**
 	 * This is the address as stored for the accelerometer on this sensor node
@@ -185,6 +188,9 @@ public class SensorThread extends Thread {
 							//System.out.println("Response with id " + data[0] + " from sensor addresss " +data[1] + " was recieved at time " + data[2]);
 							try {
 								data = CommunicationThread.dataQueue.take();//Remove the data so that the next thread can read their data from the HEAD
+								synchronized (notifier) {
+									notifier.notifyAll();
+							    }
 
 							} catch (InterruptedException e) {
 								e.printStackTrace();
@@ -210,6 +216,15 @@ public class SensorThread extends Thread {
 								System.err.println("Something went wrong.\nThe communicationThread returned values for an address that this thread does not have.");
 								throw new IllegalThreadStateException("Data got back for a thread which could not use that data"); 
 							}
+						}else{
+							synchronized (notifier) {
+								try {
+									notifier.wait();
+								} catch (InterruptedException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+						    }
 						}
 					}
 				}
