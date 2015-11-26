@@ -285,6 +285,7 @@ public class SensorThread extends Thread {
 				pOld=P;
 				xHatOld = xHat;
 				this.storeData(xHat, store);//output data
+				System.out.println("Iteration done of tread " + Thread.currentThread().getId());
 			}
 		}
 	}
