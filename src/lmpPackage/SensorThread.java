@@ -189,6 +189,12 @@ public class SensorThread extends Thread {
 				while(!gotAccel||!gotGyro){
 					data = CommunicationThread.dataQueue.peek();
 					if (data==null){
+						try {
+							notifier.wait();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						//This is just to check if there is something in the dataQueue
 					}else {
 						//System.out.println(data[0] + "" +Integer.valueOf((data[0])));
