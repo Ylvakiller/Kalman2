@@ -189,12 +189,13 @@ public class SensorThread extends Thread {
 				while(!gotAccel||!gotGyro){
 					data = CommunicationThread.dataQueue.peek();
 					if (data==null){
+						/*
 						try {
 							notifier.wait();
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
-						}
+						}*/
 						//This is just to check if there is something in the dataQueue
 					}else {
 						//System.out.println(data[0] + "" +Integer.valueOf((data[0])));
@@ -202,9 +203,9 @@ public class SensorThread extends Thread {
 							//System.out.println("Response with id " + data[0] + " from sensor addresss " +data[1] + " was recieved at time " + data[2]);
 							try {
 								data = CommunicationThread.dataQueue.take();//Remove the data so that the next thread can read their data from the HEAD
-								synchronized (notifier) {
+								/*synchronized (notifier) {
 									notifier.notifyAll();
-							    }
+							    }*/
 
 							} catch (InterruptedException e) {
 								e.printStackTrace();
@@ -231,14 +232,14 @@ public class SensorThread extends Thread {
 								throw new IllegalThreadStateException("Data got back for a thread which could not use that data"); 
 							}
 						}else{
-							synchronized (notifier) {
+							/*synchronized (notifier) {
 								try {
 									notifier.wait();
 								} catch (InterruptedException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
-						    }
+						    }*/
 						}
 					}
 				}
