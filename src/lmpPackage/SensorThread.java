@@ -344,4 +344,12 @@ public class SensorThread extends Thread {
 	public synchronized double[] getLast() {
 		return store.getLastData();
 	}
+	
+	/**
+	 * Get the last stored data
+	 * @return A double array with the last values in it
+	 */
+	public synchronized int getAmount() {
+		return store.getSize();
+	}
 }

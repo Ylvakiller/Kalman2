@@ -50,8 +50,15 @@ public class DataThread {
 	 * @return the last data in the object
 	 */
 	public double[] getLastData(){
-		System.out.println(dataArray.size());
 		return dataArray.get(dataArray.size()-1);
+	}
+	
+	/**
+	 * Get the most recent filtered data
+	 * @return the last data in the object
+	 */
+	public int getSize(){
+		return dataArray.size();
 	}
 	/**
 	 * Getter for the arrayList if needed

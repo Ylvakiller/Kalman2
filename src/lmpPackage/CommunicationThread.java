@@ -80,11 +80,6 @@ public class CommunicationThread extends Thread {
 						throw new ArrayIndexOutOfBoundsException(
 								"The command given is of incorrect format");
 					} else {
-						System.out
-								.println("The thread with thread id "
-										+ command[0]
-										+ " has given the command to get data from address "
-										+ Long.toHexString(command[1]));
 						// In this part the program should communicate with the
 						// sensors, for this I need Junior his code which is not
 						// available due to him not being here
