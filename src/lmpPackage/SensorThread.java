@@ -160,10 +160,7 @@ public class SensorThread extends Thread {
 		SimpleMatrix xHatOld = new SimpleMatrix(xHat0Dat);
 		double pIntValue = 0;
 		
-		synchronized (notifier) {//Make sure other threads have been notified
-			System.out.println("tread " + Thread.currentThread().getId() + " send a notify");
-			notifier.notifyAll();
-	    }
+		
 
 		long oldTime = System.currentTimeMillis();
 		while(true){
@@ -241,6 +238,7 @@ public class SensorThread extends Thread {
 							synchronized (notifier) {
 								try {
 									System.out.println("tread " + Thread.currentThread().getId() + " is waiting");
+									notifier.notify();;//This will make sure that before this thread goes to sleep it will wake up the next thread
 									notifier.wait();
 								} catch (InterruptedException e) {
 									// TODO Auto-generated catch block
@@ -250,10 +248,7 @@ public class SensorThread extends Thread {
 						}
 					}
 				}
-				synchronized (notifier) {//Make sure other threads have been notified
-					System.out.println("tread " + Thread.currentThread().getId() + " send a notify");
-					notifier.notifyAll();
-			    }
+				
 				long deltaTime = (timeAccel+timeGyro)/2-oldTime;
 				//Right here we have asked for new data, gotten the old data and can start processing this old data
 
