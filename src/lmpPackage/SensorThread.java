@@ -204,6 +204,7 @@ public class SensorThread extends Thread {
 							try {
 								data = CommunicationThread.dataQueue.take();//Remove the data so that the next thread can read their data from the HEAD
 								synchronized (notifier) {
+									System.out.println("tread " + Thread.currentThread() + " send a notify");
 									notifier.notifyAll();
 							    }
 
@@ -234,6 +235,7 @@ public class SensorThread extends Thread {
 						}else{
 							synchronized (notifier) {
 								try {
+									System.out.println("tread " + Thread.currentThread() + " is waiting");
 									notifier.wait();
 								} catch (InterruptedException e) {
 									// TODO Auto-generated catch block
