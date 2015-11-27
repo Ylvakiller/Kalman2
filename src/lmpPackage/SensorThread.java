@@ -198,6 +198,7 @@ public class SensorThread extends Thread {
 						}*/
 						//This is just to check if there is something in the dataQueue
 					}else {
+						System.out.println("Thread " + Thread.currentThread().getId() + " has recieved " + data[0]);
 						//System.out.println(data[0] + "" +Integer.valueOf((data[0])));
 						if (Long.valueOf((data[0]))==currentThread().getId()){
 							//System.out.println("Response with id " + data[0] + " from sensor addresss " +data[1] + " was recieved at time " + data[2]);
@@ -235,7 +236,7 @@ public class SensorThread extends Thread {
 						}else{
 							synchronized (notifier) {
 								try {
-									System.out.println("tread " + Thread.currentThread() + " is waiting");
+									System.out.println("tread " + Thread.currentThread().getId() + " is waiting");
 									notifier.wait();
 								} catch (InterruptedException e) {
 									// TODO Auto-generated catch block
