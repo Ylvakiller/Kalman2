@@ -246,6 +246,10 @@ public class SensorThread extends Thread {
 						}
 					}
 				}
+				synchronized (notifier) {//Make sure other threads have been notified
+					System.out.println("tread " + Thread.currentThread() + " send a notify");
+					notifier.notifyAll();
+			    }
 				long deltaTime = (timeAccel+timeGyro)/2-oldTime;
 				//Right here we have asked for new data, gotten the old data and can start processing this old data
 
