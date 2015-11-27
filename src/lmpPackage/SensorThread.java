@@ -159,7 +159,11 @@ public class SensorThread extends Thread {
 		};
 		SimpleMatrix xHatOld = new SimpleMatrix(xHat0Dat);
 		double pIntValue = 0;
-
+		
+		synchronized (notifier) {//Make sure other threads have been notified
+			System.out.println("tread " + Thread.currentThread().getId() + " send a notify");
+			notifier.notifyAll();
+	    }
 
 		long oldTime = System.currentTimeMillis();
 		while(true){
@@ -247,7 +251,7 @@ public class SensorThread extends Thread {
 					}
 				}
 				synchronized (notifier) {//Make sure other threads have been notified
-					System.out.println("tread " + Thread.currentThread() + " send a notify");
+					System.out.println("tread " + Thread.currentThread().getId() + " send a notify");
 					notifier.notifyAll();
 			    }
 				long deltaTime = (timeAccel+timeGyro)/2-oldTime;
@@ -299,6 +303,7 @@ public class SensorThread extends Thread {
 				pOld=P;
 				xHatOld = xHat;
 				this.storeData(xHat, store);//output data
+				
 			}
 		}
 	}
