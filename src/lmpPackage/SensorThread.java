@@ -199,14 +199,13 @@ public class SensorThread extends Thread {
 						}*/
 						//This is just to check if there is something in the dataQueue
 					}else {
-						System.out.println("Thread " + Thread.currentThread().getId() + " has recieved " + data[0]);
+						
 						//System.out.println(data[0] + "" +Integer.valueOf((data[0])));
 						if (Long.valueOf((data[0]))==currentThread().getId()){
 							//System.out.println("Response with id " + data[0] + " from sensor addresss " +data[1] + " was recieved at time " + data[2]);
 							try {
 								data = CommunicationThread.dataQueue.take();//Remove the data so that the next thread can read their data from the HEAD
 								synchronized (notifier) {
-									System.out.println("tread " + Thread.currentThread() + " send a notify");
 									notifier.notifyAll();
 							    }
 
@@ -237,7 +236,6 @@ public class SensorThread extends Thread {
 						}else{
 							synchronized (notifier) {
 								try {
-									System.out.println("tread " + Thread.currentThread().getId() + " is waiting");
 									notifier.notify();;//This will make sure that before this thread goes to sleep it will wake up the next thread
 									notifier.wait();
 								} catch (InterruptedException e) {
