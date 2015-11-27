@@ -13,7 +13,7 @@ public class SensorThread extends Thread {
 	/**
 	 * Used to let the threads sleep if they do not have anything to do but restart as soon as it is possible to do something again
 	 */
-	final static Object notifier = new Object();
+	private static Object notifier = new Object();
 	
 	/**
 	 * An object on which the data is stored
@@ -203,9 +203,9 @@ public class SensorThread extends Thread {
 							//System.out.println("Response with id " + data[0] + " from sensor addresss " +data[1] + " was recieved at time " + data[2]);
 							try {
 								data = CommunicationThread.dataQueue.take();//Remove the data so that the next thread can read their data from the HEAD
-								/*synchronized (notifier) {
+								synchronized (notifier) {
 									notifier.notifyAll();
-							    }*/
+							    }
 
 							} catch (InterruptedException e) {
 								e.printStackTrace();
@@ -232,14 +232,14 @@ public class SensorThread extends Thread {
 								throw new IllegalThreadStateException("Data got back for a thread which could not use that data"); 
 							}
 						}else{
-							/*synchronized (notifier) {
+							synchronized (notifier) {
 								try {
 									notifier.wait();
 								} catch (InterruptedException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
-						    }*/
+						    }
 						}
 					}
 				}
