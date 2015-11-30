@@ -161,26 +161,27 @@ public class SensorThread extends Thread {
 		double pIntValue = 0;
 		
 		
+		long[] commandGyro = new long[3];
+		commandGyro[0] = currentThread().getId();
+		commandGyro[1] = gyrAddress;
+		commandGyro[2] = 0;
 
+		CommunicationThread.commandQueue.offer(commandGyro);
+
+
+		long[] commandAxl = new long[3];
+		commandAxl[0] = currentThread().getId();
+		commandAxl[1] = axlAddress;
+		commandAxl[2] = 1;
+		CommunicationThread.commandQueue.offer(commandAxl);
 		long oldTime = System.currentTimeMillis();
 		while(true){
 			if(axlAddress==0||gyrAddress==0){
 				System.err.println("|Error|One or more of the address are not set, please set these using the constructor");//This makes sure that there are addresses in the correct place
 			}else{
 				//Start by requesting new data from each sensor
-				long[] command1 = new long[3];
-				command1[0] = currentThread().getId();
-				command1[1] = gyrAddress;
-				command1[2] = 0;
-
-				CommunicationThread.commandQueue.offer(command1);
-
-
-				long[] command2 = new long[3];
-				command2[0] = currentThread().getId();
-				command2[1] = axlAddress;
-				command2[2] = 1;
-				CommunicationThread.commandQueue.offer(command2);
+				CommunicationThread.commandQueue.offer(commandGyro);
+				CommunicationThread.commandQueue.offer(commandAxl);
 				//New Data has been requested, time to see if it has the old data already.
 				String[] data;
 				float[] gyroDat = new float[3];
