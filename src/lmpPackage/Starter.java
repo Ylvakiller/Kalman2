@@ -19,7 +19,7 @@ public class Starter {
 		}
 		System.out.println("Amount of values filter 1: " + sensor1.getAmount());
 		System.out.println("Amount of values filter 2: " + sensor2.getAmount());
-		
+		sensor1.getLast();
 		System.out.println("runtime = " + (System.currentTimeMillis()-runtime));
 		System.exit(0);
 		//sensor1.dataThread.print();
