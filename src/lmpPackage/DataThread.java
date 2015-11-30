@@ -32,9 +32,9 @@ public class DataThread {
 	}
 	
 	/**
-	 * Will return the specified line of data, will check if the line excists
+	 * Will return the specified line of data, will check if the line exists
 	 * @param i The index to return
-	 * @return The float array stored at i
+	 * @return The double array stored at i
 	 */
 	public double[] getData(int i){
 		if(dataArray.size()<=i){
