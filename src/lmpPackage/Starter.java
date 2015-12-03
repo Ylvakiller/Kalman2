@@ -6,6 +6,7 @@ public class Starter {
 		long runtime = System.currentTimeMillis();
 		System.out.println("test");
 		CommunicationThread com =  new CommunicationThread(1);
+		com.setPriority(Thread.MAX_PRIORITY);
 		SensorThread sensor1 = new SensorThread((byte) 0x53, (byte)0x69);
 		SensorThread sensor2 = new SensorThread((byte) 0x57, (byte)0x6d);
 		com.start();
