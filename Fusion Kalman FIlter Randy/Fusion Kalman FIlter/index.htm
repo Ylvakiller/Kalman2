@@ -57,7 +57,7 @@
 			function kalmanFilter(measVals, T) {
 				var filteredData = [];
 				filteredData[0] = [];
-				var A;
+				
 				var H = Matrix.I(4);
 
 				var R = $M([
@@ -88,6 +88,7 @@
 				]);
 
 				for(var k=0; k < measVals[0].length;) {
+					var A;
 					var p = measVals[0][k];
 					var q = measVals[1][k];
 					var r = measVals[2][k];
