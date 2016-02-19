@@ -1,7 +1,7 @@
 package lmpPackage;
 
 public class Starter {
-
+	public static Object Syncer;
 	public static void main(String[] args) {
 		long runtime = System.currentTimeMillis();
 		System.out.println("test");
